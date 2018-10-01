@@ -6,6 +6,20 @@
 
 ## Diagrammi
 
+```mermaid
+graph TD;
+    Root-->Px;
+    Root-->Py;
+    Px-->Ta;
+    Px-->Tb;
+    Px-->Tc;
+    Py-->Td;
+    Py-->Te;
+    Py-->Tf;
+```
+
+
+
 ```sequence
 Alice->Bob: Hello Bob, how are you?
 Note right of Bob: Bob thinks

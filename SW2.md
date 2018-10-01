@@ -1,10 +1,17 @@
 # SOFTWARE QUALITY (20 Sett)
 
-Software products are becoming more and more complex, lots of people involved, perform critical decisions (e.g. rockets, biomedical ...).
+Software products are becoming more and **more complex** (e.g. Debian 320 million lines), lots of people involved, perform critical decisions (e.g. rockets, biomedical ...).
 
-There needs to be a way to verify the quality of a software product like we do for physical artifacts, even if it is untangible.
+There are different **aspects** affecting the software product quality:
 
-## Attributes
+* Process quality (*HOW* we do it)
+* Cost and Time
+* People Quality
+* Development Technology
+
+There needs to be a way to **verify the quality** of the software product like we do for physical artifacts, even if it is untangible.
+
+## Product Quality Attributes
 
 **I - perceived by the user (external)**
 
@@ -25,16 +32,55 @@ There needs to be a way to verify the quality of a software product like we do f
 * Portability (reuse software with different hardware)
 * Interoperbility
 
-**III - Process Quality**
+## Process Quality
 
 * Productivity (measured in unity of effort: *person month*. 10 person months = one person working for 10 months, or 2 persons one for 4 months and another for 6 months)
-	* generally speaking one person working for 10 months is not the same of 10 people working for one month (needs for coordination ad organization)
+  * generally speaking one person working for 10 months is not the same of 10 people working for one month (needs for coordination ad organization)
+
 * Timeliness: respond to user needs in a timely fashion
-	* sometimes we have to work on the code without developing new features (adding robustness, verifying ...)
+  * sometimes we have to work on the code without developing new features (adding robustness, verifying ...)
 
 ## Lifecycle
 
-* initially code & fix
+* Initially projects lifecycle was **Code & Fix**: write code, find bugs, fix bugs, other code, ecc...
+
+* After many problems, **Waterfall Model ** was adopted
+
+#### Waterfall Model
+
+* Standardized output after every phase:
+	* Feasibility Document
+	* Requirement Analysis and Specification Document (RASD)
+	* Design Document
+* Tests:
+	* Unit -> isolated pieces
+	* Integrated -> together in subsystem and the in the whole system
+	* Alpha/Beta tests
+* Manteinance:
+	* Corrective (repair faults): 20%
+	* Adaptive (change in environment): 20%
+	* Perfective (new requirements): 50%
+	* Preventive (increase maintainability): 5%
+
+```mermaid
+graph TD;
+    Feasibility-->A(Requirement <br> Analysis <br> and Specification);
+    A-->B(Design);
+    B-->C(Code & Unit Testing);
+    C-->D(Integration & System<br>Tests);
+    D-->E(Deployement);
+    E-->F(Manteinance);
+```
+
+#### Other Models
+
+- Fast prototyping (prototype = approximate model, can be refined or thrown away)
+- Incremental delivery: start from critical features, receive feedback while developing the next features, beta versions
+- DevOps
+  - Difference between Development(release product) and Operations (give service)
+  - DevOps tries to create a collaborative mindset by bridging the gap between dev and ops
+- Open Source: many developers, difficult managing
+  - E.g. apache, 15 members have the final decision on commits
 
 
 
@@ -92,7 +138,7 @@ graph TD;
     C(Existing<br/>Systems)-->A;
     Documents-->A;
     A-->B{Requirements<br/>Model};
-    B--> | Analysis and Validation | B;
+    B--> | Analysis and <br> Validation | B;
     B-->Docs;
 ```
 
