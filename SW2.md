@@ -88,7 +88,57 @@ graph TD;
 
 * Requirements need to be *engineered*, i.e. they need a formal process to be created, reviewed and revisioned.
 * Requirements are **critical**: fixing a requirement problem during development can cost 200 times more than fixing it at the beginning
-	*  This is because many decisions are made from requirements
+  *  This is because many decisions are made from requirements
+
+## Requirements Types
+
+* **Functional** requirements: Describe the interactions between the system and its environment
+  independent from implementation. Are the <u>main goals</u> the software to be has to fulfill.
+
+  *Examples:*
+  A word processor user should be able to search for strings in the text
+  The system shall allow users to reserve taxis
+
+* **Nonfunctional** requirements:
+  User visible aspects of the system not directly related to functional behavior. Also called QoS (Quality of Service)
+
+  ​	**External**
+
+  * Performance (respond in 5 seconds)
+
+  * Reliability
+
+  * Scalability
+
+  * Capacity
+
+  * Accuracy
+
+  * Accessibility (should be accessed by smartphone)
+
+  * Availability (should be available 24/7)
+    **Internal**
+
+  * Robustness (How the system works in unexpected conditions)
+
+  * Exception handling
+
+  * Interoperability
+
+    **Security**
+
+  * Integrity
+
+  * Confidentiality
+
+* **Constraints** (“pseudo requirements”):
+  Imposed by the client or the environment in which the system operates
+
+  *Examples:*
+
+  The implementation language must be Java
+  The credit card payment system must be able to be dynamically invoked by
+  other systems relying on it
 
 ## RE Complexity
 
