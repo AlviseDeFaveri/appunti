@@ -25,3 +25,4 @@ graph TD;
 | $IXL_2$ |             |  |      |      | $IXL_2$ | $XL_2$ |      |      | w2(Td) |
 | $IXL_{1,3}$ | $IXL_{1,3}$ | $XL_3$-> T3 commits and releases lock | | |  |  | | | w3(Tb) |
 | $IXL_1$ | $IXL_1$ | $IXL_1$ -> can now be granted | | |  |  | | | w1(Ta) |
+

@@ -80,7 +80,11 @@ graph TD;
   - Difference between Development(release product) and Operations (give service)
   - DevOps tries to create a collaborative mindset by bridging the gap between dev and ops
 - Open Source: many developers, difficult managing
-  - E.g. apache, 15 members have the final decision on commits
+  - Solution e.g. apache: 15 members have the final decision on commits
+
+
+
+------------------------------
 
 
 
