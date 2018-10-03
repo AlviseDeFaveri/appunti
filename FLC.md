@@ -1,6 +1,6 @@
 # DEFINIZIONI BASE
 
-* **Alphabet**: insieme finito di elementi (cardinalità)
+* **Alphabet**: insieme finito di elementi (cardinalità)  $\sum$ = {$a_1$,$a_2$,...,$a_k$}, $|\sum|$ = K
 * **String**: sequenza ordinata di elementi di un alfabeto
 * **Language**: insieme finito o infinito di stringhe
   * *Cardinality*: numero di stringhe nel linguaggio
