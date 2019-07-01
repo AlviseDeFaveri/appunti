@@ -1,3 +1,7 @@
+# FLC Lab Cheatsheet
+
+*albione, mr. ghiellazzo, brikkarè*
+
 ### EXPRESSIONS
 
 ```c
@@ -36,6 +40,18 @@ Date due espressioni e una condizione da verificare, restituisce una nuova espre
 t_axe_expression gt = handle_binary_comparison(program, $1, $3, _GT_);
 ```
 -----
+
+Generare istruzioni per capire se un'expression è vera
+
+```C
+// crea la costante 0 come espression
+t_axe_expression zero_const = create_expression(0, IMMEDIATE);
+
+// genero l'istruzione che compara il risultato di $5 con 0
+t_axe_expression is_exp_zero = handle_binary_comparison (program, $5, zero_const, _EQ_);
+```
+
+---
 
 Prendere il valore intero di una espressione
 
@@ -81,6 +97,8 @@ t_axe_label* assignNewLabel(t_program_infos* program);
 Crea e assegna una nuova etichetta (usata nei backward jump).
 *ESEMPIO*:  `condition_label = assignNewLabel(program);`
 
+-----
+
 ### JUMPS
 
 ```C
@@ -93,6 +111,8 @@ t_axe_instruction gen_<JUMP>_instruction(t_program_infos *program, t_axe_label *
 Genera un'istruzione di salto, la cui condizione è espressa da <JUMP> alla posizione indicata dalla label dest.
 
 *ESEMPIO*:  `gen_bt_instruction(program, start, 0);`
+
+-----
 
 ### REGISTERS
 
@@ -116,8 +136,6 @@ Carica una costante in un registro. Viene restituito l'identificativo del regist
 ```C
 $$.value = gen_load_immediate(program, 0)    // init $$ a 0
 ```
-
-
 
 ----------
 
@@ -178,7 +196,7 @@ Carica in posizion index l'espressione data.
 Capire se una var è array
 
 ```C
-t_axe_variable* array = getVariable(program, $1)
+t_axe_variable* array = getVariable(program, $1);
 
 if(!array->isArray){
     notifyError(AXE_INVALID_VARIABLE);
@@ -188,29 +206,53 @@ if(!array->isArray){
 Capire se una var è scalare
 
 ```C
-t_axe_variable* scalar = getVariable(program, $1)
+t_axe_variable* scalar = getVariable(program, $1);
 
 if(scalar->isArray){
     notifyError(AXE_INVALID_VARIABLE);
 }
 ```
 
+Lunghezza array
 
+```C
+t_axe_variable* array;
+int len = array->arraySize;    // controllare prima che sia un array
+```
+
+---
 
 ### LOOPS
 
 *ESEMPIO*
 
 ```C
-condition_label = assignNewLabel(program);
-gen_subi_instruction(program, index_reg, index_reg, 1);
-end_label = newLabel(program);
-gen_beq_instruction(program, end_label, 0);
+// init index
 
-[loop body]
+t_axe_label* condition_label, end_label;
+
+condition_label = assignNewLabel(program);               // creo e assegno label
+gen_subi_instruction(program, index_reg, index_reg, 1);  // i--
+
+end_label = newLabel(program);               // creo label (senza assegnarla)
+gen_beq_instruction(program, end_label, 0);  // salto alla label appena creata
+
+// loop body
 
 gen_bt_instruction(program, condition_label, 0);
-assignLabel(program, end_label);
+
+/* Assegno la label finale */
+assignLabel(program, end_label);    // assegno label finale
 ```
 
 ![](/home/elvis/Pictures/flc.png)
+
+### VARIABILI
+
+Prendere il registro contenente la variabile a partire dal suo nome (ovver il suo ID)
+
+```C
+/* get the location of the symbol with the given ID */
+location = get_symbol_location(program, $1, 0);
+```
+
