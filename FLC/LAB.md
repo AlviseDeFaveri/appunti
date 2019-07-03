@@ -1,6 +1,6 @@
 # 						                        FLC Lab Cheatsheet
 
-​                                                                    *albione, Mr. ghiellazzo*
+*albione, Mr. ghiellazzo*
 
 ### EXPRESSIONS
 
@@ -16,6 +16,8 @@ binop: ADD, ANDB, ORB, SUB, SHL, SHR, MUL, DIV
 ```
 
 Date due espressioni ed un tipo di operazione si occupa di allocare i registri, produrre l'operazione binaria a livello di assembly e restituisce una nuova espressione contenente il risultato dell'operazione.
+
+N.B: Gli operandi sono **expressions!** Esistono anche le versioni tra registri (`gen_XXX_instruction`).
 
 *ESEMPIO:* Calcolare \$1 - 1
 
@@ -266,7 +268,7 @@ if(scalar->isArray){
 ##### Lunghezza di un Array
 
 ```C
-t_axe_variable* array;
+t_axe_variable* array = getVariable(program, $1);
 int len = array->arraySize;    // controllare prima che sia un array
 ```
 
@@ -317,13 +319,13 @@ exp: IDENTIFIER {
 
 ##### Quando fare free
 
-* Ogni volta che si usa l'IDENTIFIER di una variabile bisogna poi fare free della variabile, perchè la stringa che contiene il nome della variabile è allocata dinamicamente
+* Ogni volta che si usa l'<IDENTIFIER> di una variabile bisogna poi fare `free`, perchè la stringa che contiene il nome della variabile è allocata dinamicamente
 
   *ESEMPIO*
 
   ```C
   assign_stmt: IDENTIFIER ASSIGN exp {
-  	// fai qualcosa con $1
+  	/* ...fai qualcosa con $1... */
       free($1);
   }
   ```
@@ -336,22 +338,61 @@ exp: IDENTIFIER {
 
 ##### Variabili globali
 
-Quando c'è un costrutto che non ammette livelli di innestamento e dentro a quel costrutto gli <IDENTIFIER> hanno un significato particolare (e.g. *alias*, *exists*) può essere utile usare una **variabile globale** di ACSE per segnalare alle regole quando si è dentro al costrutto.
+Quando c'è un costrutto che non ammette livelli di innestamento e dentro a quel costrutto alcune regole o espressioni si devono comportare in modo diverso dal solito (e.g. *alias*, *exists*) può essere utile usare una **variabile globale** di ACSE per segnalare alle regole quando si è dentro al costrutto.
+
+*ESEMPIO:* Variabile globale per un costrutto non innestato
 
 ```C
 /* Inizio del file ACSE.y */
 %{
-    // ... includes ...
-    // ... global vars ...
+    /* ... includes ... */
+    /* ... global vars ... */
     
+    // Creo la mia struct
+    struct global_struct{
+        int a;
+        t_axe_label b;
+        /* ... */
+    } glob;
  }
+          // inizializzo la variabile globale quando "entro"
+new_expr: INIT_TOKEN { glob.a = 1; glob.b = newLabel(program);} 
+			expr
+		// resetto quando "esco" dalla subexpression
+		END_TOKEN { glob.a = 0; assignLabel(program, glob.b); }
 ```
 
+##### Aggiungere un nuovo tipo
 
+Se voglio che una certa espressione racchiuda più informazioni insieme, devo assegnargli un tipo custom:
 
+1. Creare la struct che descrive il nuovo tipo, e.g.:
 
+   ```c
+   typedef struct {
+       int a;
+       t_axe_label* start;
+       t_axe_label* end;
+   } t_new_struct;
+   ```
 
-## TODO
+2. Aggiungere il tipo alla `%union` iniziale:
 
-- quando usare variabili globali
-- aggiungere nuovo type (se vuoi ritornare più cose al livello superiore)
+   ```c
+   %union{
+       /* .... */
+       t_new_struct new_struct;
+   }
+   ```
+
+3. Assegnare il tipo al token
+
+   ```c
+   %token<new_struct> SOME_TOKEN
+   ```
+
+---
+
+### LISTE
+
+* todo
