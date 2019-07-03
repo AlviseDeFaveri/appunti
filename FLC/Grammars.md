@@ -201,3 +201,32 @@ $$
   \end{cases}
 \end{equation}
 $$
+
+---
+
+$$
+L = \{ a^hb^k \ |\ 0 \leq h \leq k \leq 2h \}
+$$
+
+Grammar (**ambiguous**):
+$$
+\begin{equation}
+  G: \begin{cases}
+    S \rightarrow aSb \\
+    S \rightarrow aSbb \\
+    S \rightarrow \varepsilon  \\
+  \end{cases}
+\end{equation}
+$$
+Grammar (**unambiguous**):
+$$
+\begin{equation}
+  G: \begin{cases}
+    S \rightarrow \varepsilon \\
+    S \rightarrow aSb \\
+    S \rightarrow Z \\
+    Z \rightarrow abb \\
+    Z \rightarrow aZbb \\
+  \end{cases}
+\end{equation}
+$$
