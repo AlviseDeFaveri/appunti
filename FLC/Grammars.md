@@ -107,7 +107,7 @@ $$
 
 ### Counting
 
-Same number of $a$ and $b$ (no order)
+Numero di $a$ = Numero di $b$ (miste)
 $$
 \begin{equation}
   G:
@@ -230,3 +230,25 @@ $$
   \end{cases}
 \end{equation}
 $$
+
+---
+
+$$
+L = \{ wc^n \ | \ w \in \{a,b\}^* \ \and\ n> 0\ \and\ (\#a = n\ \or\ \#b = n ) \}
+$$
+
+Grammar (**ambiguous**):
+$$
+\begin{equation}
+  G: \begin{cases}
+    S \rightarrow A\ |\ B \\
+    A \rightarrow XaAc\ |\ XaXc \\
+    B \rightarrow YbBc\ |\ YbYc \\
+    X \rightarrow bX\ |\ \varepsilon \\
+    Y \rightarrow aY\ |\ \varepsilon \\
+  \end{cases}
+\end{equation}
+$$
+
+---
+
