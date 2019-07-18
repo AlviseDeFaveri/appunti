@@ -1,3 +1,11 @@
+# Table of Contents
+
+---
+
+[TOC]
+
+---
+
 # BASICS
 
 **Confidentiality:** only some can see<br/>
@@ -38,30 +46,15 @@
 
 **Definition:** 1949 Shannon, *Communication theory of secrecy systems*
 
-  ```mermaid
-  graph LR
-      B(Plaintext) --> C{CRYPTO<br/>SYSTEM}
-      C --> D[Ciphertext]
-      D -->|KEY| B
-  ```
+**Kerckhoff Principle:** Security relies on the secrecy of the <u>key</u>, never on the secrecy of the algorithm. (1883, *La Cryptographie Militaire*)
 
-**Kerckhoff Principle:** Security relies on the secrecy of the <u>key</u>, never on the secrecy of the algorithm.
-
-  1883, *La Cryptographie Militaire*
-
-**Perfect Cipher** (Shannon): No matter how much time/strength is spent, no secret will be leaked. <br/>This means that the probability of reading a message M is equal with or without the cyphertext.
+**Perfect Cipher** (Shannon): No matter how much time/strength is spent, no secret will be leaked. This means that the probability of reading a message M is equal <u>with or without</u> the cyphertext.
 $$
 P(M=m\ |\ C=c)\ =\ P(M=m)
 $$
-Possible only if key length is same of message length.
-$$
-  |K|\ge|M|
-$$
-**OTP** (One Time Pad)  $\rightarrow​$ minimal perfect cipher
-$$
-Ciphertext = m\ XOR\ k\quad\quad\quad len(m)=len(k)
-$$
-Practically infeasible.
+Possible only if key length is same of message length $|K|\ge |M|$. Practically infeasible.
+
+**OTP** (One Time Pad)  $\rightarrow$ minimal perfect cipher   $Ciphertext = m\ XOR\ k\quad\quad\quad len(m)=len(k)$
 
 **Real Cryptosystems:** Can always be bruteforced, hence <u>no real system is invulnerable</u>.
 
@@ -190,7 +183,7 @@ Uses prime number factorization  $n=p\times q​$
 
 **Broken Hash Functions:** given $n​$ the number of output bits, we need
 
-* $2^{n-1}$ for <u>arbitrary collisions</u> (1st or 2nd preimage attacks)
+* $2^{n-1}​$ for <u>arbitrary collisions</u> (1st or 2nd preimage attacks)
 * $2^{n/2}$ for <u>simplified collisions</u> (e.g. given 367 people, the probability that 2 have the same birth is 100%).
 
 ## Digital Signature
@@ -208,24 +201,22 @@ D --> M2(Msg)
 M2 --> Bob
 ```
 
-**Digital Signature:** check authentication & integrity 
+**Digital Signature:** checks authentication & integrity 
 
 ```mermaid
 graph LR;
-Alice --> M(Msg)
-P(Alice's Private) --> H
-P2(Alice's Public) --> D
-M -->|hash| H
-H --> C{ }
-C -->|encrypted hash| D{ }
-M --> D2{ }
-D2 -->|plaintext msg| D3{ }
-D --> H2(H)
-
-D3 --> M2(Msg)
-M2 -->|hash| H3(H)
-H3 -->|compare| H2
-H2 --> Bob
+Msg(Original<br>Message) --> Plaintext
+Msg --> Hash
+Hash -->|encrypt with<br/>private key| H(Encrypted<br>Hash)
+Plaintext --> G1( )
+H --> G1
+G1 -->|insecure channel| G2( )
+G2 --> P2[Plaintext]
+P2 -->|Compute hash| H3(Computed<br>Hash)
+H3 --> A
+G2 --> H2(Encrypted<br>Hash)
+H2 -->|Decrypt with<br>public key| H4(Original<br>Hash)
+H4 --> A(=?)
 ```
 
 1. Sender hashes the message
@@ -235,15 +226,11 @@ H2 --> Bob
 5. Receiver calculates hash of received message
 6. Receiver compares calculated hash with decrypted hash
 
-**PKI** (*Public Key Infrastructure*): nedeed to be sure <u>who</u> signed a message. 
-
-The idea is to use a third party authority, called **CA** (*Certificate Authority*) to sign <u>certificates</u> that bind <u>public keys</u> to **DN**s (*Distinguished Name*).
-
-Who ensures the signatures of a CA? Another CA. This happens recursively until the **Root CA**, which issues a self-signed certificate.
+**PKI** (*Public Key Infrastructure*): nedeed to be sure <u>who</u> signed a message. <br>The idea is to use a third party authority, called **CA** (*Certificate Authority*) to sign <u>certificates</u> that bind <u>public keys</u> to **DN**s (*Distinguished Name*).<br>Who ensures the signatures of a CA? Another CA. This happens recursively until the **Root CA**, which issues a self-signed certificate.
 
 **CRL ** (*Certificate Revocation Lists*) are also needed to list all revoked certificates (keys cannot be destroyed).
 
-**Verification Sequence:**
+**Verification Sequence**
 
 1. Verify that the signature validates the message
 2. Verify that the Public Key of the signature matches the certificate
@@ -255,7 +242,13 @@ Who ensures the signatures of a CA? Another CA. This happens recursively until t
 
 **Identification:** an entity declares its identifier, e.g. login<br/>**Authentication:** the entity provides a *proof* that verifies the identity, e.g. password
 
-#### 1. To known factor
+---
+
+:warning: *Identity, Authentication and Authorization (or Access Control)* are **different things**.
+
+---
+
+## 1. To known factor
 
 E.g. <u>password</u>.
 
@@ -278,20 +271,19 @@ To **minimize the risk** of a shared secret getting stolen, we can:
 
 * Use a ***challenge-response scheme*** 
 
-  ```mermaid
-  sequenceDiagram
-      Alice->>John: Hi!
-      John->>John: calculate random R1
-      John->>John: hash(R1 + secret)
-      John->>Alice: R1
-      Alice->>John: hash(R1 + secret)
-      Alice->>Alice: calculate random R2
-      Alice->>Alice: hash(R1 + secret + R2)
-      Alice->>John: R2
-      John->>Alice: hash(R1 + secret + R2)
+  ```sequence
+  Alice->Bob: Hi!
+  Bob->Bob: calculate random R1
+  Bob->Bob: hash(R1 + secret)
+  Bob->Alice: R1
+  Alice->Bob: hash(R1 + secret)
+  Alice->Alice: calculate random R2
+  Alice->Alice: hash(R1 + secret + R2)
+  Alice->Bob: R2
+  Bob->Alice: hash(R1 + secret + R2)
   ```
 
-#### 2. To Have factor
+## 2. To Have factor
 
 E.g. <u>token, key</u>. 
 
@@ -310,7 +302,7 @@ E.g. <u>token, key</u>.
   - Smart Cards: non volatile RAM keeps private key, uses *challenge-response*
   - Smartphone password generators. Worse than dedicated generators (HW is not dedicated $\rightarrow$ vulnerable).
 
-#### 3. To be factor
+## 3. To be factor
 
 E.g. <u>fingerprints</u>. 
 
@@ -332,7 +324,130 @@ E.g. <u>fingerprints</u>.
   - Face form
   - DNA
 
+## New Schemes
+
+**Social Factor**: who you know (has been breaked)
+
+**Single sign on**: elect a trusted host, where the user will authenticate. 
+
+* <u>PRO</u> Single password to remember for the user, less expenses on security policies for companies
+
+* <u>CON</u> single point of failure
+
+* e.g. Shibboleth
+
+  ```sequence
+  Alice->Server: I'm Alice
+  Server->AUnicaLogin:Is Alice a student?
+  AUnicaLogin->Alice:Please authenticate
+  Alice-->AUnicaLogin:usr,pwd
+  AUnicaLogin-->Server: Alice is a student
+  Server-->Alice: Grant access
+  
+  ```
+
+  
+
+
+# ACCESS CONTROL
+
+**Access** is a binary decision: it is either allowed or denied.<br>**Access rules** are needed to describe accesses on large scales  ("*who does what on which resource*").<br>**Reference Monitor** enforces access control policies, present in all modern kernels. Cannot be bypassed.
+
+## DAC
+
+**Discretionary Access Control**: Resource (e.g. file) owner discretionarily decides its access privileges. All off-the-shelf OSs implement DAC.
+
+**HRU Model**: Given $S$ (*subjects*) and $O$ (*objects*), $A$ is the matrix of *actions* with $S$ rows and $O$ columns where $A[s,o]$ indicates the privileges of $s$ over $o$ (e.g. read/write).
+
+|           | file1          | file2          |
+| --------- | -------------- | -------------- |
+| **Alice** | Read           | Own,Read,Write |
+| **Bob**   | Own,Read,Write | Read,Write     |
+
+**Protection State**: triple $(S, O, A)$
+
+**Transitions** is a sequence of basic operations (i.e. create or destroy subjects, objects, actions). 
+
+e.g. Creating a file
+
+```c
+create_file(subject u, file f)
+{
+    // First check the existance!!
+    if(f not exists)
+    {
+    	create f;
+    	add "own" into A[u,f];
+    	add "read" into A[u,f];
+    }
+}
+```
+
+**Safety Problem**: Given an initial protection state and set of transitions, is there
+any sequence of transitions that leaks a certain right r (for which the owner is removed) into the access matrix?<br> $\rightarrow$ <u>undecidable</u> for generic HRU
+
+**Implementations**
+
+* Record each row of $A$ as a tuple in a DB
+
+* **ACLs** (Access Control Lists): for each <u>object</u>, list of subjects and auth
+
+* **Capability Lists** for each <u>subject</u>, list of objects and auth
+
+  | ACLs                                             | Capability Lists                                     |
+  | ------------------------------------------------ | ---------------------------------------------------- |
+  | Efficient in **per object** operations           | Efficient in **per subject** operations              |
+  | Common                                           | Uncommon (usually objects change more than subjects) |
+  | No multiple owners (unless you introduce groups) |                                                      |
+
+**Cons**
+
+* Cannot be proven to be safe
+* Controls access to objects, not data inside the objects
+* Problems of scalability
+
+## MAC
+
+**Mandatory Access Control**: don't let the user decide the privileges. A security administrator decides the **classification** (*clearance*) of subjects and objects.
+
+**Classification** is composed of an ordered set of *secrecy levels* (e.g. Top Secret > Secret > FOUO > Unofficial...)  and *labels* (e.g. nuclear, crypto...).
+
+**Lattice**: (<u>partially ordered</u>) given two classifications with secrecy $C_1, C_2$ and two sets of labels $L_1, L_2​$ respectively, we have
+$$
+\{C_1, L_1\} \geq \{C_2, L_2\} \iff C_1 \geq C_2\ and\ L_2 \subseteq L_1
+$$
+![](/home/elvis/Pictures/lattice.png)
+
+**Bell-Lapadula** model:
+
+1. A subject cannot read at higher secrecy levels
+2. A subject cannot write at lower secrecy levels
+3. DAC rule: access matrix for discretionary access on top
+4. **Tranquillity property**: secrecy levels of objects don't change
+
+* **Cons:** does not address integrity
+
+## RBAC
+
+Sort of hybrid of MAC and DAC.
+
 # BINARY
+
+Memory errors in Desktop Applications.
+
+## Priviledge escalation
+
+* Every file has a owner
+* Every process has a **RUID** (*Real UID*)
+* When executing a program, the permissions (e.g. to read files) are checked against the **EUID** (*Effective UID*) of the process
+* EUID can be $\neq$ RUID. In particular, to execute priviledged instructions, a program can use a **SUID** (*Saved User ID*) that is different from the one of the user that executed the program (e.g. cab be *root*).
+
+---
+
+:warning: Drop privileges as soon as possible!
+
+---
+
 
 ## Buffer Overflow
 
@@ -343,7 +458,7 @@ E.g. <u>fingerprints</u>.
 * Se il buffer è abbastanza grande, mettere lo shellcode alla fine del buffer con prima delle `NOP`.
 * Se non ci sta nel buffer, mettere lo shellcode in una variabile d'ambiente `$EGG` e emettere nell'`EIP` l'indirizzo di `$EGG`.
 
-***Solutions***
+### Solutions
 
 * **Source Code Defenses**
 
@@ -384,19 +499,16 @@ E.g. <u>fingerprints</u>.
 
 * Se come stringa uso `%x %x %x`... posso leggere lo stack $\rightarrow$ **memory leak**
 
-  * `%10\$x` serve per leggere il decimo indirizzo sopra nello stack
+  * `%10$x` serve per leggere il decimo indirizzo sopra nello stack
 
-  * ```
-    for i in `seq 1 150`; do echo -n "$i " && ./vuln "AAAA %$i\$s"; done
-    ```
-
-  * Posso usarla ad es. per trovare la posizione di una variabile globale
+  * Posso usarlo ad es. per trovare la posizione di una variabile globale
 
 * **Per scrivere** I want to write 0xXXXXYYYY in target address $tgt$
 
-  ```
+  ```html
   case XXXX < YYYY
   	<tgt+2(hex)> <tgt(hex)> %<XXXX(dec)-8>c %<pos(dec)>$hn %<YYYY-XXXX(dec)>c %<pos+1(dec)>$hn
+  	
   case XXXX > YYYY
   	<tgt(hex)> <tgt+2(hex)> %<YYYY(dec)-8>c %<pos(dec)>$hn %<XXXX-YYYY(dec)>c %<pos+1(dec)>$hn
   ```
@@ -404,7 +516,7 @@ E.g. <u>fingerprints</u>.
 * Countermeasures
 
   * Quelle per buffer overflow
-  * Checkare il numero di parametri e il umero di placeholder
+  * Checkare il numero di parametri e il numero di placeholder
 
 * General case
 
@@ -414,9 +526,9 @@ E.g. <u>fingerprints</u>.
   * a mechanism (e.g., placeholders) to (in)directly r/w arbitrary locations
   * the ability for the user to control them
 
-----
+# WEB
 
-# Web Vulnerabilities
+Code injection in web applications.
 
 **SQL Injection** There must be a data flow from a  user-controlled HTTP variable (e.g., parameter, cookie, or other header fields)  to a SQL query,  without appropriate filtering and validation . If this happens, the SQL structure of the query can be modified .
 
@@ -424,6 +536,8 @@ E.g. <u>fingerprints</u>.
 
 * Server Admin: Escaping, prepared queries
 * DB admin: restrict access on tables
+
+*Blind Injections* are injections where the query executed does not display values back to the attacker. Still it gets executed, hence we can for examples **INSERT** something.
 
 **Reflected XSS** It creates a per-request dataflow that originates from the client's rendered page (e.g., input field or other HTTP variable), ending up on the client's rendered page (e.g., interpreted HTML or JS content) as a result of the server response 
 
@@ -450,7 +564,31 @@ Attacker sends a malicious link to the victim, which is logged in with the bank'
 2. Blacklist
 3. Escape characters that are needed to be displayed
 
-# Malware
+# NETWORK PROTOCOL ATTACKS
+
+## DOS
+
+### Killer Packets
+
+### SYN flood
+
+### Smurf & amplification
+
+### DDos
+
+## Sniffing
+
+## Spoofing
+
+# FIREWALLS
+
+# NETWORK SECURITY
+
+## HTTPS
+
+## SET
+
+# MALWARE
 
 **Viruses**: self-propagate by infecting other files, usually executables (but also documents with macros, bootloader code). They are not programs (i.e., not executables).
 
@@ -484,7 +622,7 @@ Attacker sends a malicious link to the victim, which is logged in with the bank'
   * detect signs (behavior) of known malware
   * detect “common behaviors” of malware
 
-#### Countermeasures
+## Countermeasures
 
 * **Ex-post workflow**
   1. suspicious executable reported by "someone"
