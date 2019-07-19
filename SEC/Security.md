@@ -329,7 +329,7 @@ E.g. <u>fingerprints</u>.
 
 ## New Schemes
 
-**Social Factor**: who you know (has been breaked)
+**Social Factor**: who you know (has been broken)
 
 **Single sign on**: elect a trusted host, where the user will authenticate. 
 
