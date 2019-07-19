@@ -269,7 +269,7 @@ To **minimize the risk** of a shared secret getting stolen, we can:
 
 * Use *random data* to avoid **replay** attacks
 
-* Use a ***challenge-response scheme*** 
+* Use a ***challenge-response scheme***
 
   ```sequence
   Title: Challenge-Response scheme
@@ -339,18 +339,15 @@ E.g. <u>fingerprints</u>.
 
 * e.g. Shibboleth
 
-  ```sequence
-  Title: Single Sign On Example
-  Alice->Server: I'm Alice
-  Server->AUnicaLogin:Is Alice a student?
-  AUnicaLogin->Alice:Please authenticate
-  Alice-->AUnicaLogin:usr,pwd
-  AUnicaLogin-->Server: Alice is a student
-  Server-->Alice: Grant access
-  
-  ```
-
-  
+   ```sequence
+         Title: Single Sign On Example
+         Alice->Server: I'm Alice
+         Server->AUnicaLogin:Is Alice a student?
+         AUnicaLogin->Alice:Please authenticate
+         Alice-->AUnicaLogin:usr,pwd
+         AUnicaLogin-->Server: Alice is a student
+         Server-->Alice: Grant access
+   ```
 
 
 # ACCESS CONTROL
@@ -435,7 +432,7 @@ $$
 
 Sort of hybrid of MAC and DAC.
 
-# BINARY
+# BINARY ATTACKS
 
 Memory errors in Desktop Applications.
 
@@ -536,7 +533,7 @@ Memory errors in Desktop Applications.
   * a mechanism (e.g., placeholders) to (in)directly r/w arbitrary locations
   * the ability for the user to control them
 
-# WEB
+# WEB APPLICATION ATTACKS
 
 Code injection in web applications.
 
@@ -599,7 +596,7 @@ Attacker sends a malicious link to the victim, which is logged in with the bank'
 
 :warning: DoS is generally **always feasible**, given enough resources (i.e., the attacker can just rent a botnet for a few hours)
 
-:warning: Attacks are made possible essentially by the **lack of (strong) authentication** in the protocols
+:warning:Attacks are made possible essentially by the **lack of (strong) authentication** in the protocols
 
 ---
 
@@ -613,7 +610,7 @@ Attacker sends a malicious link to the victim, which is logged in with the bank'
 
 **SYN flood**: Attacker generates <u>TCP SYN</u> requests with spoofed IP $\rightarrow$ The server keeps all half open connections in memory waiting for ACK, filling the queue.
 
-* **Solution - SYN Cookies**: choose a random generated cookie as ISN (Id Sequence Number) that identifies the client. In this way we don't need to remember the open connections and we can discard the half open ones.
+* **Solution - SYN Cookies**: choose a random generated cookie as ISN (Initial Sequence Number) that identifies the client. In this way we don't need to remember the open connections and we can discard the half open ones.
 
 **Smurf**: Send <u>ICMP</u> packets with spoofed IP to a broadcast address $\rightarrow$ the response will be sent by millions of machines to the spoofed address.
 
@@ -638,7 +635,7 @@ Attacker sends a malicious link to the victim, which is logged in with the bank'
 
 ---
 
-**TCP Hijacking**: Mettersi in mezzo nell'handshake <u>TCP</u>.
+**TCP Hijacking**: Mettersi in mezzo nell'handshake <u>TCP</u>. Se l'ISN (*Initial Sequence Number*) non è veramente random, mi posso sostituire a metà di un handshake con il server indovinando il sequence number che si aspetta.
 
 ```sequence
 participant Client
@@ -650,7 +647,7 @@ participant Server2
 note over Client: Normal TCP\nHandshake
 
 Client -> Server: SYN(seq=x)
-Server --> Client: ACK(seq=y, ack=x+1)
+Server --> Client: SYN-ACK(seq=y, ack=x+1)
 Client -> Server: ACK(seq=x+1, ack=y+1)
 Client -> Server: Data(...)
 
@@ -658,7 +655,7 @@ note over Victim: Hijacked TCP\nHandshake
 
 Victim -> Server2: SYN(seq=x)
 Attacker -> Victim: DoS
-Server2 --> Attacker: ACK(seq=y, ack=x+1)
+Server2 --> Attacker: SYN-ACK(seq=y, ack=x+1)
 Attacker -> Victim: DoS
 Attacker -> Attacker: Guess x (and y \nif not MITM)
 Attacker -> Victim: DoS
@@ -681,93 +678,304 @@ Se nel **recursive** riesci a spoofare l'ID della richiesta del DNS e ti fingi u
 
 ## Tabellozzo
 
-| Name            | Protocol            | Pourpose(s)                | Solution(s)               |
-| --------------- | ------------------- | -------------------------- | ------------------------- |
-| Ping of Death   | ICMP                | DoS                        |                           |
-| Teardrop        | TCP                 | DoS                        |                           |
-| Land Attack     | TCP                 | DoS                        |                           |
-| SYN Flood       | TCP                 | DoS                        | SYN Cookie                |
-| Smurf           | ICMP                | DDoS                       | No Broadcast from outside |
-| Promiscuous NIC | -                   | Sniffing                   | Use switches              |
-| TCP Hijacking   | TCP                 | Spoofing, Sniffing, DoS    |                           |
-| DNS Poisoning   | DNS                 | DoS, Sniffing              |                           |
-| DHCP Poisoning  | DHCP                | DoS, Sniffing, Redirection |                           |
-| ICMP Redirect   | ICMP                | DoS, Sniffing, Redirection |                           |
-| ARP spoofing    | ARP                 | DoS, Spoofing              |                           |
-| MAC Flooding    | ARP (with switches) | Spoofing                   |                           |
-| STP Attack      | BDPU                | Spoofing, Sniffing         |                           |
-| IP Spoofing     | UDP, ICMP           | Spoofing                   |                           |
-| Route Mangling  | IGRP, RIP, OSPF     | Redirection                |                           |
+| Name            | Protocol            | Pourpose(s)                | Solution(s)                     |
+| --------------- | ------------------- | -------------------------- | ------------------------------- |
+| Ping of Death   | ICMP                | DoS                        |                                 |
+| Teardrop        | TCP                 | DoS                        |                                 |
+| Land Attack     | TCP                 | DoS                        |                                 |
+| SYN Flood       | TCP                 | DoS                        | SYN Cookie                      |
+| Smurf           | ICMP                | DDoS                       | No Broadcast from outside       |
+| Promiscuous NIC | -                   | Sniffing                   | Use switches *                  |
+| TCP Hijacking   | TCP                 | Spoofing, Sniffing, DoS    |                                 |
+| DNS Poisoning   | DNS                 | DoS, Sniffing              |                                 |
+| DHCP Poisoning  | DHCP                | DoS, Sniffing, Redirection |                                 |
+| ICMP Redirect   | ICMP                | DoS, Sniffing, Redirection |                                 |
+| ARP spoofing    | ARP                 | DoS, Spoofing              |                                 |
+| MAC Flooding    | ARP (with switches) | Spoofing                   | * Also switches  are vulnerable |
+| STP Attack      | BDPU                | Spoofing, Sniffing         |                                 |
+| IP Spoofing     | UDP, ICMP           | Spoofing                   |                                 |
+| Route Mangling  | IGRP, RIP, OSPF     | Redirection                |                                 |
 
-# FIREWALLS
+# SECURE ARCHITECTURES
 
-# NETWORK SECURITY
+## Firewalls
 
-## HTTPS
+**Firewall**: network access control system that verifies all the packets flowing through it.
 
-## SET
+Its main functions are usually:
+
+* IP packet filtering
+* Network address translation (NAT)
+
+Must be the **single enforcement point** between a screened network and outside networks. A firewall checks only the traffic flowing through it: powerless against insider attacks 
+
+* **Solution**: partition the network
+
+### Network layer firewalls
+
+* **Packet filters** (network)
+
+  * Decodes the IP (and part of the TCP) header: SRC and DST IP, SRC and DST port, Protocol type, IP options
+  * Stateless: cannot track TCP connections.
+  * Have **rules**:  `if(condition) then (block | allow | log)`
+
+* **Stateful packet filters** (network-transport)
+
+  * Include network packet filters, plus keep track of the **TCP state machine** (after SYN, SYN-ACK must follow) and we can **track connections** without adding a response rule.
+
+  * Deeper content inspection (packet defragmenting, application level filtering, NAT)
+
+  * Handles sessions at transport level (TCP and UDP), essential for NAT.
+
+    * **TCP session**: create a new slot for every new connection, discard if no SYN-ACK received.
+
+    * **UDP** has no sessions $\rightarrow​$ packets near in time are considered in the same sessione
+
+    * **FTP Inspection**: FTP has a *Standard Mode* (download from server) and a *Passive Mode* (upload to server). Command port is always 21, but data port is <u>dynamic</u>. The firewall must know which port to open and close dynamically.
+
+      *Standard Mode*
+
+      ```sequence
+      participant Server\nPort 20 as SD
+      participant Server\nPort 21 as SC
+      participant Client\nPort 21 as CC
+      participant Client\nPort _Dynamic_ as CD
+      
+      Title: Standard  Mode
+      CC -> SC: PORT ClientIp:<Dynamic>
+      SC --> CC: PORT <Dynamic> OK
+      SD ->> CD: Data Transfer
+      ```
+
+      *Passive Mode*
+
+      ```sequence
+            participant Server\nPort _Dynamic_ as SD
+            participant Server\nPort 21 as SC
+            participant Client\nPort A as CC
+            participant Client\nPort B as CD
+            
+            Title: Passive  Mode
+            CC -> SC: PASV?
+            SC --> CC: PASV OK <Dynamic>
+            CS ->> SD: Data Transfer
+      ```
+
+### Application Level Firewalls
+
+* **Circuit level firewalls** (transport-application): client connects to a port of the proxy
+  * legacy, not transparent
+  * only historical example SOCKS
+* **Application proxies** (application): Tutto il traffico va verso il proxy.
+  * specific filtering, advanced scanning (e.g. antivirus/spam)
+
+## Multi Zone architectures
+
+ Split the network by privileges levels. Firewalls are used to regulate access.
+
+* **DMZ** (Demilitarized Zone): semi-public zone where we put public servers (Web, FTP, Public DNS, Inbound SMTP) and no critical data.
+* Private zone: DB, AS, Outbound SMTP ...
+
+## VPNs
+
+Encrypted end-to-end overlay connection over a (public) network, used e.g. to connect from internet to a VPN server in the private zone of a company network.
+
+VPNs solve the problem of creating a trusted network transport over an untrusted channel.
+
+**Full tunnelling**
+
+* <u>Every packet</u> goes through the tunnel.
+* Traffic multiplication, could be <u>inefficient</u>.
+* Single point of control and application of all security policies as if the client were in the corporate network.
+
+**Split tunnelling**
+
+*  Traffic to the corporate network $\rightarrow$ VPN<br> Traffic to the Internet $\rightarrow$ ISP (bypassing the VPN Server)
+*  <u>More efficient, less control</u>
+*  Just similar to the case of the PC connected via 3G modem to the Internet.
+
+Current technologies:
+
+* PPTP (Microsoft)
+* SSL
+* SSH tunnel
+* OpenVPN
+
+# SECURE PROTOCOLS
+
+## SSL (Secure Socket Layer)
+
+Current technology used in **HTTPS** = HTTP over SSL. 
+
+Client and Server may use different **suites of algorithms** for encryption, exchange etc... (so to be flexible w.r.t. technical evolution). The algorithms used are decided in the handshake.
+
+*SSL Handshake*
+
+```sequence
+participant Client as C
+participant Server as S
+C -> S: Cipher suite + random data
+S -->C: Cipher selection + other random data
+S->C: Server's certificate
+note over C: Check certificate
+note over C: Calculate Pre-Master\nfrom random data\nexchanged before
+C-->S: Pre-master secret(encrypted)
+note over S: Decrypt and extract\nsecret key
+
+
+```
+
+1. Client sends its suite of algorithms + random data
+2. Server communicates which cipher is selected for the transmission + random data
+3. Server sends its certificate
+4. Client **checks certificate**
+   1. Is the certificate in validity period?
+   2. Is the root CA trusted?
+   3. Is the certificate valid (same Pub Key)?
+   4. Is it revoked (CRLs)?
+   5. Is the DN of the certificate the same of the server?
+5. Client computes pre-master key = first random + secret + second random
+6. Client encrypts pre-master with server's public key
+7. Client sends pre-master to server
+8. Server decrypts pre-master, subtracts the random data and finds the secret key.
+
+**N.B.** Random data is needed to avoid **replay attacks**: new connection from same two nodes will result in a different key every time, so it can't be replayed.
+
+**Is SSL resistant to MITM?** Yes
+
+| Attack                                            | Not possible because                                         |
+| ------------------------------------------------- | ------------------------------------------------------------ |
+| Let the original certificate through              | Attacker doesn't have the key to decrypt the following messages |
+| Send a fake certificate signed by non trusted CA  | CA check fails (4.2)                                         |
+| Send a good certificate with fake name            | DN check fails (4.5)                                         |
+| Send a good certificate with different public key | Certificate validity check fails (4.3)                       |
+
+**Cons**
+
+* No protection before or after transmission (e.g. trojan on client, non honest merchant ...)
+* Relies on PKI
+* All passages need to be implemented correctly
+
+## SET (Secure Electronic Transaction)
+
+Legacy, not used now because both the client and the servers need a certificate. Protects **transactions**, not connections.
+
+**Dual Hash**: hash( hash(order_info) + hash(payment_info) ) <br>**Dual Signature**: signed dual hash (i.e. encrypted with client's private key)
+
+The Client sends to the merchant and the payment gateway the information they have to read + the hash of the information sent to the other, so each can check the signature.
+
+```sequence
+participant Client as C
+participant Merchant as M
+participant Payment\nGateway as P
+note over C: hash1=hash(order_info)\n hash2=hash(payment_info)
+note over C: dual_hash=hash(hash1+hash2)
+note over C: dual_signature:\nencrypt(hash1+hash2, private_key)
+C->M: encrypt(order_info + hash2 + dual_signature)
+note over M: decrypt message
+note over M: dual_hash = decrypt(dual signature)
+note over M: hash1=hash(order_info)
+note over M: hash(hash1+hash2) == dual_hash?
+M -->C:ok
+C->P: encrypt(payment_info + hash1 + dual_signature)
+note over P: Same as merchant,\nbut hashing payment info
+P -->C:ok
+```
+
+**Cons**
+
+* Requires a digital certificate for merchant, payment gateway and **the client**!
+* Non-transparent $\rightarrow$ less critical mass
 
 # MALWARE
 
 **Viruses**: self-propagate by infecting other files, usually executables (but also documents with macros, bootloader code). They are not programs (i.e., not executables).
 
+* **Lifecycle**: reproduce, infect, stay hidden, run payload. (N.B. most modern malware does not self-propagate).
+* **Infection Techniques**:
+  * **Boot Viruses** install themselves in the MBR(Master Boot Record) or in boot sector of partitions
+  * **File Infectors** can:
+    * Overwrite the original file
+    * Append and modify entrypoint (*parasitic* virus)
+    * Inject code in unused regions (*multicavity* virus)
+  * **Macro Viruses** introduced because macros blur the line between data and code, e.g. spreadsheet macros
+
 **Worms**: programs that self-propagate, even remotely, often by exploiting host vulnerabilities, or by social engineering (e.g., mail worms).
 
-<u>Defenses</u>:
+* **Mass-Mailers** propagate by emailing themselves using victim address book to look more trustworthy (now happens with social media)
+* **Mass-Scanners** to propagate quickly some decisions can be made when seeking the next target:
+  * Random addresses
+  * Local preference (more towards local network)
+  * Permutation (divide IP address space between different instances)
 
-* Patches
-  ○ Most worms exploit known vulnerabilities
-  ○ Useless against zero-day worms
-* Signatures (**antivirus**)
-  ○ Must be developed automatically
-  ○ Worms operate too quickly for human response
-* Intrusion or anomaly detection
-  ○ Notice fast spreading, suspicious activity.
-  ○ Can be a driver to automated signature generation
+* <u>**Defenses**</u>:
+  * **Patches**
+    * Most worms exploit known vulnerabilities
+    * Useless against zero-day worms
+  * **Signatures** (**antivirus**)
+    *  Must be developed automatically (too quick for human response)
+  * Intrusion or **anomaly detection**
+    * Notice fast spreading, suspicious activity.
+    * Can be a driver to automated signature generation
 
 **Trojan horses**: apparently benign program that hide a malicious functionality and allow remote control.
 
-## Antivirus and Anti-malware
-
-* Basic strategy: **signature-based detection**
-  * database of byte-level or instruction-level signatures that match malware
-  *  wildcards can be used, regular expressions common
-* **Heuristics** (check for signs of infection)
-  * code execution starts in last section
-  * incorrect header size in PE header
-  * suspicious code section name
-  * patched import address table
-* **Behavioral Detection**
-  * detect signs (behavior) of known malware
-  * detect “common behaviors” of malware
-
-## Countermeasures
-
-* **Ex-post workflow**
-  1. suspicious executable reported by "someone"
-  2. automatically analyzed
-  3. manually analyzed
-  4. antivirus signature developed
-* **Static analysis**: Parse the executable code
-  * PRO: code coverage, dormant code
-  * CON: obfuscation
-* **Dynamic Analysis**: observe the runtime behaviour
-  * PRO: good against obfuscation 
-  * CON: no complete code coverage
-
 ## Malware Stealth Techniques
 
-* **Polymorphism**
-  * Change layout (shape) with each infection
-  * Payload is encrypted (~ packing)
-    *  using different key for each infection
-    * makes static string analysis practically impossible, but AV could detect encryption routine
-* **Metamorphism**
-  * Create different “versions” of code that look different
-* **Packing**
-  * Encrypt with differet key everytime (like polymorphism)
-  * Additionally:
-    * Compress/Decompress
-    * Anti-debugging techniques
-    * Anti-VM techniques
-    * Virtualization
+**Metamorphism**: Create different “versions” of code that look different, e.g. insert NOPs or increment and decrement useless counters.
+
+**Polymorphism**: Change layout (shape) with each infection and encrypt payload.
+
+*  using different key for each infection
+* makes static string analysis practically impossible, but AV could detect encryption routine
+
+**Packing**: Encrypt with differet key everytime (like polymorphism) and additionally:
+
+* Compress/Decompress
+* Anti-debugging techniques
+* Anti-VM techniques
+* Virtualization
+
+## Antivirus and Anti-malware
+
+- Basic strategy: **signature-based detection**
+  - database of byte-level or instruction-level signatures that match malware
+  - wildcards can be used, regular expressions common
+- **Heuristics** (check for signs of infection)
+  - code execution starts in last section
+  - incorrect header size in PE header
+  - suspicious code section name
+  - patched import address table
+- **Behavioral Detection**
+  - detect signs (behavior) of known malware
+  - detect “common behaviors” of malware
+
+When a **new virus** is discovered, normally there is the following **ex-post workflow**:
+
+1. suspicious executable reported by "someone"
+2. automatically analyzed
+3. manually analyzed
+4. antivirus signature developed
+
+Two possible analysis can be made:
+
+| Static analysis                         | **Dynamic Analysis**          |
+| --------------------------------------- | ----------------------------- |
+| Parse the executable code               | Observe the runtime behaviour |
+| Good for code coverage and dormant code | No complete code coverage     |
+| Bad against obfuscation                 | Good against obfuscation      |
+
+## Rootkits
+
+Software *kits* which aim to keep the attacker in control of a machine (a.k.a remain root) by hiding its presence to the user or to the kernel itself.
+
+**Userland Rootkit**
+
+* E.g. backdoored login
+* Trojanized ps, netstat, ls, find, du, who, ifconfig ...
+* Easier to build and to detect (cross layer examination with non-trojanized tools)
+
+**Kernel Space Rootkit**
+
+* Syscall hijacking (modify SYS_CALL table, Interrupt table or Global Descripto table)
+* Can be detected only via post-mortem analysis
