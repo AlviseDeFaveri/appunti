@@ -272,15 +272,18 @@ To **minimize the risk** of a shared secret getting stolen, we can:
 * Use a ***challenge-response scheme*** 
 
   ```sequence
+  Title: Challenge-Response scheme
   Alice->Bob: Hi!
-  Bob->Bob: calculate random R1
-  Bob->Bob: hash(R1 + secret)
-  Bob->Alice: R1
-  Alice->Bob: hash(R1 + secret)
-  Alice->Alice: calculate random R2
-  Alice->Alice: hash(R1 + secret + R2)
-  Alice->Bob: R2
-  Bob->Alice: hash(R1 + secret + R2)
+  note right of Bob: calculate rand1
+  note right of Bob: hash(rand1 + secret)
+  Bob->Alice: rand1
+  note left of Alice: hash(rand1 + secret)
+  Alice->Bob: hash(rand1 + secret)
+  note left of Alice: calculate rand2
+  note left of Alice: hash(rand1 + secret + rand2)
+  Alice->Bob: rand2
+  note right of Bob: hash(rand1 + secret + rand2)
+  Bob->Alice: hash(rand1 + secret + rand2)
   ```
 
 ## 2. To Have factor
@@ -337,6 +340,7 @@ E.g. <u>fingerprints</u>.
 * e.g. Shibboleth
 
   ```sequence
+  Title: Single Sign On Example
   Alice->Server: I'm Alice
   Server->AUnicaLogin:Is Alice a student?
   AUnicaLogin->Alice:Please authenticate
@@ -470,6 +474,13 @@ Memory errors in Desktop Applications.
 
   * Randomize ordering of stack variables
   * Canary 
+    | Content of the Stack |
+    | -------------------- |
+    | Arguments            |
+    | sEIP                 |
+    | sEBP                 |
+    | **Canary**           |
+    | ... variables ...    |
     * *<u>terminator</u>*: fatto di caratteri `\0` per impedire la sovrascrittura con `scanf(%s)`<br/> $\rightarrow$ Come fotterlo: *Devo poter scrivere direttamente oltre il canary*
     * *<u>random</u>*: chosen at runtime, saved in a register, placed <u>after the sEBP</u> in function prologue and compared in the function epilogue. <br/>$\rightarrow​$ Come fotterlo: *Memory Leakage del canary*
     * *<u>random XOR</u>*
@@ -488,7 +499,6 @@ Memory errors in Desktop Applications.
 
   * Address Space Layout Randomization (**ASLR**) <br> $\rightarrow$ Come fotterlo: *Memory Leakage del sEBP o un qualsiasi puntatore*
 
-  
 
 ## Format Strings
 
@@ -530,14 +540,18 @@ Memory errors in Desktop Applications.
 
 Code injection in web applications.
 
-**SQL Injection** There must be a data flow from a  user-controlled HTTP variable (e.g., parameter, cookie, or other header fields)  to a SQL query,  without appropriate filtering and validation . If this happens, the SQL structure of the query can be modified .
+## SQL Injection
+
+There must be a data flow from a  user-controlled HTTP variable (e.g., parameter, cookie, or other header fields)  to a SQL query,  without appropriate filtering and validation . If this happens, the SQL structure of the query can be modified .
 
 <u>Solutions</u> 
 
-* Server Admin: Escaping, prepared queries
-* DB admin: restrict access on tables
+* Server Admin: **Escaping**, prepared queries
+* DB admin: **restrict access** on tables
 
 *Blind Injections* are injections where the query executed does not display values back to the attacker. Still it gets executed, hence we can for examples **INSERT** something.
+
+## XSS
 
 **Reflected XSS** It creates a per-request dataflow that originates from the client's rendered page (e.g., input field or other HTTP variable), ending up on the client's rendered page (e.g., interpreted HTML or JS content) as a result of the server response 
 
@@ -545,10 +559,13 @@ Code injection in web applications.
 
 <u>Solutions</u>
 
-* Server Admin: Escaping, filtering
-* CSP: disables inline scripts by default. Scripts can 
+* Server Admin: **Escaping**, filtering.
+* **SOP** (Same Origin Policy): Scripts have to come from a file in the same origin of the page.
+* **CSP** (Content Security Policy): disables inline scripts by default. Scripts can be executed when coming from the origin defined in the CSP.
 
-**CSRF** Forces an user to execute unwanted actions (**state-changing actions**) on a web application in which he is currently authenticated (e.g., with cookies). This can happen when the application authenticates the user only with “ambient credentials” (cookies, which are sent automatically with every request)
+## CSRF
+
+Forces an user to execute unwanted actions (**state-changing actions**) on a web application in which he is currently authenticated (e.g., with cookies). This can happen when the application authenticates the user only with “ambient credentials” (cookies, which are sent automatically with every request)
 
 <u>Exploit</u>
 
@@ -556,29 +573,131 @@ Attacker sends a malicious link to the victim, which is logged in with the bank'
 
 <u>Solutions</u>
 
-* **CSRF token:** Send a different token (e.g. in HTTP header) at each request and ask the user to send it back at next request (e.g. hidden field in form that contains the received token.)
+* **CSRF token:** Send a different token (e.g. in HTTP header) at each request and ask the user to send it back at next request (e.g. hidden field in form that contains the received token).
 
-**Sequence of Validation**
+  **Sequence of CSRF Token Validation**
 
-1. Whitelist
-2. Blacklist
-3. Escape characters that are needed to be displayed
+  1. Whitelist
+  2. Blacklist
+  3. Escape characters that are needed to be displayed
 
 # NETWORK PROTOCOL ATTACKS
 
-## DOS
+## Types
 
-### Killer Packets
+**Denial of Service** (against availability): service unavailable to legitimate users
 
-### SYN flood
+* **DDOS** (Distributed DoS)
+  * **Botnet**: network of compromised computers.
+  * **C&C**: Command and control infrastructure that enables the attacker to send commands to the bots.
 
-### Smurf & amplification
+**Sniffing** (against confidentiality): abusive reading of network packets
 
-### DDos
+**Spoofing** (against integrity and authenticity): forging network packets
 
-## Sniffing
+---
 
-## Spoofing
+:warning: DoS is generally **always feasible**, given enough resources (i.e., the attacker can just rent a botnet for a few hours)
+
+:warning: Attacks are made possible essentially by the **lack of (strong) authentication** in the protocols
+
+---
+
+## List of Attacks
+
+**Killer Packets**: exploit memory error in network stack implementations.
+
+* **Ping of Death**: <u>ICMP</u> echo request longer that maximum legal length.
+* **Teardrop**: <u>TCP</u> reassembly vulnerability: send fragmented packets with overlapping offsets.
+* **Land Attack** (old windows): <u>TCP SYN</u> with sourceID = destID
+
+**SYN flood**: Attacker generates <u>TCP SYN</u> requests with spoofed IP $\rightarrow$ The server keeps all half open connections in memory waiting for ACK, filling the queue.
+
+* **Solution - SYN Cookies**: choose a random generated cookie as ISN (Id Sequence Number) that identifies the client. In this way we don't need to remember the open connections and we can discard the half open ones.
+
+**Smurf**: Send <u>ICMP</u> packets with spoofed IP to a broadcast address $\rightarrow$ the response will be sent by millions of machines to the spoofed address.
+
+* **BAF** (Bandwidth Amplification Factor): 
+  $$ BAF = \dfrac{Response\ len \times \#\ of\ responses }{Request\ len} $$
+
+* **Solution** (in the sending network): Firewall that denies Broadcast messages from external.
+
+---
+
+**NIC in Promiscuous Mode**: Use *Network Interface Card* to read everything that passes on the network.
+
+* **Solution**: <u>switch</u> (selettivi) e non <u>hub</u> (broadcastano tutto).
+
+**ARP Spoofing**: The first one replying to an ARP request ("*who is 192.168.0.1?*") is trusted. Each host caches the ARP replies.
+
+**MAC Flooding**: Happens using <u>switches</u>: a switch records which MAC address is on which of its ports in a **CAM Table**. If an attacker is able to fill the CAM table of the switch, there is no more space left to store ARP replies, so they must be sent to every port.
+
+**STP attack**: Switches decide how to build the ST (*Spanning Tree*) by exchanging BPDU (*bridge protocol data unit*) packets to elect the root node. BPDU packets are not authenticated, so an attacker can change the shape of the tree for sniffing or ARP spoofing purposes.
+
+**IP Spoofing**: Changing the IP source address in UDP or ICMP is easy. The response is not received by the attacker (*blind spoofing*) unless he is also sniffing the network or ARP spoofed the victim.
+
+---
+
+**TCP Hijacking**: Mettersi in mezzo nell'handshake <u>TCP</u>.
+
+```sequence
+participant Client
+participant Server
+participant Victim
+participant Attacker
+participant Server2
+
+note over Client: Normal TCP\nHandshake
+
+Client -> Server: SYN(seq=x)
+Server --> Client: ACK(seq=y, ack=x+1)
+Client -> Server: ACK(seq=x+1, ack=y+1)
+Client -> Server: Data(...)
+
+note over Victim: Hijacked TCP\nHandshake
+
+Victim -> Server2: SYN(seq=x)
+Attacker -> Victim: DoS
+Server2 --> Attacker: ACK(seq=y, ack=x+1)
+Attacker -> Victim: DoS
+Attacker -> Attacker: Guess x (and y \nif not MITM)
+Attacker -> Victim: DoS
+Attacker -> Server2: ACK(seq=x+1, ack=y+1)
+
+```
+
+
+
+**DNS Poisoning**: Quando un client fa una richiesta <u>DNS</u> a un server, se quel server non ha l'indirizzo in cache può:
+
+* Redirezionare il client a un altro DNS (**iterative**)
+* Contattare direttamente un altro DNS (**recursive**)
+
+Se nel **recursive** riesci a spoofare l'ID della richiesta del DNS e ti fingi un altro DNS $\rightarrow$ si salva il tuo indirizzo nella cache.
+
+**DHCP Poisoning**: by sending `DHCP_OFFER` messages the attacker can impersonate the **DHCP** server and set the victim's IP or Gateway.
+
+**ICMP Redirect**: The attacker communicates with an <u>ICMP</u> packet to the victim that there is a better route to a desired host that passes through the attacker.
+
+## Tabellozzo
+
+| Name            | Protocol            | Pourpose(s)                | Solution(s)               |
+| --------------- | ------------------- | -------------------------- | ------------------------- |
+| Ping of Death   | ICMP                | DoS                        |                           |
+| Teardrop        | TCP                 | DoS                        |                           |
+| Land Attack     | TCP                 | DoS                        |                           |
+| SYN Flood       | TCP                 | DoS                        | SYN Cookie                |
+| Smurf           | ICMP                | DDoS                       | No Broadcast from outside |
+| Promiscuous NIC | -                   | Sniffing                   | Use switches              |
+| TCP Hijacking   | TCP                 | Spoofing, Sniffing, DoS    |                           |
+| DNS Poisoning   | DNS                 | DoS, Sniffing              |                           |
+| DHCP Poisoning  | DHCP                | DoS, Sniffing, Redirection |                           |
+| ICMP Redirect   | ICMP                | DoS, Sniffing, Redirection |                           |
+| ARP spoofing    | ARP                 | DoS, Spoofing              |                           |
+| MAC Flooding    | ARP (with switches) | Spoofing                   |                           |
+| STP Attack      | BDPU                | Spoofing, Sniffing         |                           |
+| IP Spoofing     | UDP, ICMP           | Spoofing                   |                           |
+| Route Mangling  | IGRP, RIP, OSPF     | Redirection                |                           |
 
 # FIREWALLS
 
