@@ -1,10 +1,8 @@
-# Table of Contents
+## Table of Contents
 
 ---
 
 [TOC]
-
----
 
 # BASICS
 
@@ -33,30 +31,22 @@
 * Activism
 * State-founded
 
+**Risk:** <u>Assets</u> $ \times$ <u>Vulnerabilities</u> $\times$ Threats (first two are controllable)<br/>
+**Security:** Has to balance the reduction of vulnerabilities with costs, direct and <u>indirect</u> (less usability, less performance).
+
 ---
 
 :warning: **SECURITY $\neq$ PROTECTION**: Security depends on <u>assets</u> and <u>threats</u>: USA president is more protected but less safe than a normal citizen.
 
 ---
 
-**Risk:** <u>Assets</u> $ \times$ <u>Vulnerabilities</u> $\times​$ Threats (first two are controllable)<br/>
-**Security:** Has to balance the reduction of vulnerabilities with costs, direct and <u>indirect</u> (less usability, less performance).
-
 # CRYPTOGRAPHY
 
-**Definition:** 1949 Shannon, *Communication theory of secrecy systems*
-
-**Kerckhoff Principle:** Security relies on the secrecy of the <u>key</u>, never on the secrecy of the algorithm. (1883, *La Cryptographie Militaire*)
-
-**Perfect Cipher** (Shannon): No matter how much time/strength is spent, no secret will be leaked. This means that the probability of reading a message M is equal <u>with or without</u> the cyphertext.
+**Kerckhoff Principle:** Security relies on the secrecy of the <u>key</u>, never on the secrecy of the algorithm.<br>**Perfect Cipher** (Shannon): No matter how much time/strength is spent, no secret will be leaked. This means that the probability of reading a message M is equal <u>with or without</u> the cyphertext. Possible only if key length is same of message length $|K|\ge |M|​$. Practically infeasible.
 $$
 P(M=m\ |\ C=c)\ =\ P(M=m)
 $$
-Possible only if key length is same of message length $|K|\ge |M|$. Practically infeasible.
-
-**OTP** (One Time Pad)  $\rightarrow$ minimal perfect cipher   $Ciphertext = m\ XOR\ k\quad\quad\quad len(m)=len(k)$
-
-**Real Cryptosystems:** Can always be bruteforced, hence <u>no real system is invulnerable</u>.
+**OTP** (One Time Pad)  $\rightarrow$ minimal perfect cipher:  $Ciphertext = m\ XOR\ k\ | \ len(m)=len(k)​$<br>**Real Cryptosystems:** Can always be bruteforced, hence <u>no real system is invulnerable</u>.
 
 ---
 
@@ -75,7 +65,7 @@ K(Key) --> C{ }
 M --> C
 C -->|insecure channel| D{ }
 D --> M2(Message)
-M2 --> B(Bobo)
+M2 --> B(Bob)
 K -->|secure channel| M2
 
 ```
@@ -93,8 +83,8 @@ K -->|secure channel| M2
 
 **Robustness**
 
-* Encryption in $O(n)$
-* Decryption w/ bruteforce $O(2^n)$
+* Encryption in $O(n)​$
+* Decryption w/ bruteforce $O(2^n)​$
 
 ## Asymmetric Encryption
 
@@ -104,8 +94,8 @@ What is encrypted with <u>KEY1</u> can be decrypted only with <u>KEY2</u>.
 graph LR;
 Alice --> M(Msg)
 M --> C{ }
-P(Bob's Public) --> C
-S(Bob's Private) --> M2
+P(Bob's Public) -->|encrypt| C
+S(Bob's Private) -->|decrypt| M2
 C -->|insecure channel| D{ }
 D --> M2(Msg)
 M2 --> Bob
@@ -188,17 +178,17 @@ Uses prime number factorization  $n=p\times q​$
 
 ## Digital Signature
 
-**Authentication**: encrypt with private key, decrypt with public key to be sure that was encrypted by Alice.
+**Basic Authentication**: Sender encrypts with <u>private key</u>, anyone can decrypt with public key an be sure it was encrypted by sender.
 
 ```mermaid
 graph LR;
 Alice --> M(Msg)
 M --> C{ }
-P(Alice's Private) --> C
-C -->|encrypted msg| D{ }
-S(Alice's Public) --> M2
+P(Alice's Private) -->|encrypt| C
+C -->|insecure channel| D{ }
+S(Alice's Public) -->|decrypt| M2
 D --> M2(Msg)
-M2 --> Bob
+M2 --> Anyone
 ```
 
 **Digital Signature:** checks authentication & integrity 
@@ -274,16 +264,16 @@ To **minimize the risk** of a shared secret getting stolen, we can:
   ```sequence
   Title: Challenge-Response scheme
   Alice->Bob: Hi!
-  note right of Bob: calculate rand1
-  note right of Bob: hash(rand1 + secret)
+  note over Bob: generate rand1
   Bob->Alice: rand1
-  note left of Alice: hash(rand1 + secret)
-  Alice->Bob: hash(rand1 + secret)
-  note left of Alice: calculate rand2
-  note left of Alice: hash(rand1 + secret + rand2)
+  note over Alice: hash(rand1+secret)
+  Alice-->Bob: hash(rand1 + secret)
+  note over Bob: check hash
+  note over Alice: calculate rand2
   Alice->Bob: rand2
-  note right of Bob: hash(rand1 + secret + rand2)
+  note over Bob: hash(rand1+secret+rand2)
   Bob->Alice: hash(rand1 + secret + rand2)
+  note over Alice: check hash
   ```
 
 ## 2. To Have factor
@@ -360,16 +350,16 @@ E.g. <u>fingerprints</u>.
 
 **HRU Model**: Given $S$ (*subjects*) and $O$ (*objects*), $A$ is the matrix of *actions* with $S$ rows and $O$ columns where $A[s,o]$ indicates the privileges of $s$ over $o$ (e.g. read/write).
 
+*HRU Example*
+
 |           | file1          | file2          |
 | --------- | -------------- | -------------- |
 | **Alice** | Read           | Own,Read,Write |
 | **Bob**   | Own,Read,Write | Read,Write     |
 
-**Protection State**: triple $(S, O, A)$
+**Protection State**: triple $(S, O, A)$<br>**Transitions** is a sequence of basic operations (i.e. create or destroy subjects, objects, actions). 
 
-**Transitions** is a sequence of basic operations (i.e. create or destroy subjects, objects, actions). 
-
-e.g. Creating a file
+*e.g. Creating a file*
 
 ```c
 create_file(subject u, file f)
@@ -384,8 +374,7 @@ create_file(subject u, file f)
 }
 ```
 
-**Safety Problem**: Given an initial protection state and set of transitions, is there
-any sequence of transitions that leaks a certain right r (for which the owner is removed) into the access matrix?<br> $\rightarrow$ <u>undecidable</u> for generic HRU
+**Safety Problem**: Given an initial protection state and set of transitions, is there any sequence of transitions that leaks a certain right r (for which the owner is removed) into the access matrix?<br> $\rightarrow$ <u>undecidable</u> for generic HRU
 
 **Implementations**
 
@@ -409,11 +398,7 @@ any sequence of transitions that leaks a certain right r (for which the owner is
 
 ## MAC
 
-**Mandatory Access Control**: don't let the user decide the privileges. A security administrator decides the **classification** (*clearance*) of subjects and objects.
-
-**Classification** is composed of an ordered set of *secrecy levels* (e.g. Top Secret > Secret > FOUO > Unofficial...)  and *labels* (e.g. nuclear, crypto...).
-
-**Lattice**: (<u>partially ordered</u>) given two classifications with secrecy $C_1, C_2$ and two sets of labels $L_1, L_2​$ respectively, we have
+**Mandatory Access Control**: don't let the user decide the privileges. A security administrator decides the **classification** (*clearance*) of subjects and objects.<br>**Classification** is composed of an ordered set of *secrecy levels* (e.g. Top Secret > Secret > FOUO > Unofficial...)  and *labels* (e.g. nuclear, crypto...).<br>**Lattice**: (<u>partially ordered</u>) given two classifications with secrecy $C_1, C_2$ and two sets of labels $L_1, L_2$ respectively, we have
 $$
 \{C_1, L_1\} \geq \{C_2, L_2\} \iff C_1 \geq C_2\ and\ L_2 \subseteq L_1
 $$
@@ -430,11 +415,9 @@ $$
 
 ## RBAC
 
-Sort of hybrid of MAC and DAC.
+Hrt of hybrid of MAC and DAC.
 
 # BINARY ATTACKS
-
-Memory errors in Desktop Applications.
 
 ## Priviledge escalation
 
@@ -470,29 +453,39 @@ Memory errors in Desktop Applications.
 * **Compiler Level Defenses**
 
   * Randomize ordering of stack variables
-  * Canary 
-    | Content of the Stack |
-    | -------------------- |
-    | Arguments            |
-    | sEIP                 |
-    | sEBP                 |
-    | **Canary**           |
-    | ... variables ...    |
+  * Stack Canary 
+    ```
+          Content of the Stack   
+        | -------------------- | High Addresses
+        |    function args     | 
+        |    sEIP              |  
+        |----------------------|
+        |    sEBP              |  
+        | ->>CANARY<<-         | 
+        | ... variables ...    | 
+        |      ...             | Low Addresses
+    ```
     * *<u>terminator</u>*: fatto di caratteri `\0` per impedire la sovrascrittura con `scanf(%s)`<br/> $\rightarrow$ Come fotterlo: *Devo poter scrivere direttamente oltre il canary*
-    * *<u>random</u>*: chosen at runtime, saved in a register, placed <u>after the sEBP</u> in function prologue and compared in the function epilogue. <br/>$\rightarrow​$ Come fotterlo: *Memory Leakage del canary*
+    * *<u>random</u>*: chosen at runtime, saved in a register, placed <u>after the sEBP</u> in function prologue and compared in the function epilogue. <br/>$\rightarrow$ Come fotterlo: *Memory Leakage del canary*
     * *<u>random XOR</u>*
 
 * **OS Level Defenses**
 
   * Non executable stack (**W^X**) <br/>$\rightarrow​$ Come fotterlo: *Ret to libc*
-
-    |                                  | Content of the Stack           |
-    | -------------------------------: | ------------------------------ |
-    |     *Arguments of libc function* | Address of **X**               |
-    | *Where to return after system()* | `exit`                         |
-    |              *EIP* $\rightarrow$ | Pointer to function *system()* |
-    |              *EBP* $\rightarrow$ | sEBP                           |
-    |                          ***X*** | `\bin\sh`                      |
+    ```
+             Content of the Stack  
+             after buffer overflow
+         | ------------------------- |
+         |      ...                  |
+         |     <X>                   | <-- address of '\bin\sh' string
+         |     exit                  | <-- where to return after system()
+         |     Pointer to system()   | <-- sEIP
+         | ------------------------- |
+         |     sEBP                  |
+         |    ...                    |
+         |    `\bin\sh`              | <-- <X>
+         |     ...                   |
+    ```
 
   * Address Space Layout Randomization (**ASLR**) <br> $\rightarrow$ Come fotterlo: *Memory Leakage del sEBP o un qualsiasi puntatore*
 
@@ -510,7 +503,7 @@ Memory errors in Desktop Applications.
 
   * Posso usarlo ad es. per trovare la posizione di una variabile globale
 
-* **Per scrivere** I want to write 0xXXXXYYYY in target address $tgt$
+* **Per scrivere** I want to write 0xXXXX YYYY in target address $tgt$
 
   ```html
   case XXXX < YYYY
@@ -525,17 +518,13 @@ Memory errors in Desktop Applications.
   * Quelle per buffer overflow
   * Checkare il numero di parametri e il numero di placeholder
 
-* General case
+* **General case** - format strings can be exploited when there is:
 
-  * a so-called variadic function
-    *  a variable number of parameters
-    * the fact that parameters are "resolved" at runtime by pulling them from the stack
+  * a so-called variadic function, i.e. a variable number of parameters and parameters are "resolved" at runtime by pulling them from the stack
   * a mechanism (e.g., placeholders) to (in)directly r/w arbitrary locations
   * the ability for the user to control them
 
 # WEB APPLICATION ATTACKS
-
-Code injection in web applications.
 
 ## SQL Injection
 
@@ -615,11 +604,9 @@ Attacker sends a malicious link to the victim, which is logged in with the bank'
 **Smurf**: Send <u>ICMP</u> packets with spoofed IP to a broadcast address $\rightarrow$ the response will be sent by millions of machines to the spoofed address.
 
 * **BAF** (Bandwidth Amplification Factor): 
-  $$ BAF = \dfrac{Response\ len \times \#\ of\ responses }{Request\ len} $$
+  $$ BAF = \dfrac{Response\ len \times \#\ of\ responses }{Request\ len} ​$$
 
 * **Solution** (in the sending network): Firewall that denies Broadcast messages from external.
-
----
 
 **NIC in Promiscuous Mode**: Use *Network Interface Card* to read everything that passes on the network.
 
@@ -632,8 +619,6 @@ Attacker sends a malicious link to the victim, which is logged in with the bank'
 **STP attack**: Switches decide how to build the ST (*Spanning Tree*) by exchanging BPDU (*bridge protocol data unit*) packets to elect the root node. BPDU packets are not authenticated, so an attacker can change the shape of the tree for sniffing or ARP spoofing purposes.
 
 **IP Spoofing**: Changing the IP source address in UDP or ICMP is easy. The response is not received by the attacker (*blind spoofing*) unless he is also sniffing the network or ARP spoofed the victim.
-
----
 
 **TCP Hijacking**: Mettersi in mezzo nell'handshake <u>TCP</u>. Se l'ISN (*Initial Sequence Number*) non è veramente random, mi posso sostituire a metà di un handshake con il server indovinando il sequence number che si aspetta.
 
@@ -670,7 +655,7 @@ Attacker -> Server2: ACK(seq=x+1, ack=y+1)
 * Redirezionare il client a un altro DNS (**iterative**)
 * Contattare direttamente un altro DNS (**recursive**)
 
-Se nel **recursive** riesci a spoofare l'ID della richiesta del DNS e ti fingi un altro DNS $\rightarrow$ si salva il tuo indirizzo nella cache.
+  Se nel **recursive** riesci a spoofare l'ID della richiesta del DNS e ti fingi un altro DNS $\rightarrow$ si salva il tuo indirizzo nella cache.
 
 **DHCP Poisoning**: by sending `DHCP_OFFER` messages the attacker can impersonate the **DHCP** server and set the victim's IP or Gateway.
 
@@ -678,23 +663,23 @@ Se nel **recursive** riesci a spoofare l'ID della richiesta del DNS e ti fingi u
 
 ## Tabellozzo
 
-| Name            | Protocol            | Pourpose(s)                | Solution(s)                     |
-| --------------- | ------------------- | -------------------------- | ------------------------------- |
-| Ping of Death   | ICMP                | DoS                        |                                 |
-| Teardrop        | TCP                 | DoS                        |                                 |
-| Land Attack     | TCP                 | DoS                        |                                 |
-| SYN Flood       | TCP                 | DoS                        | SYN Cookie                      |
-| Smurf           | ICMP                | DDoS                       | No Broadcast from outside       |
-| Promiscuous NIC | -                   | Sniffing                   | Use switches *                  |
-| TCP Hijacking   | TCP                 | Spoofing, Sniffing, DoS    |                                 |
-| DNS Poisoning   | DNS                 | DoS, Sniffing              |                                 |
-| DHCP Poisoning  | DHCP                | DoS, Sniffing, Redirection |                                 |
-| ICMP Redirect   | ICMP                | DoS, Sniffing, Redirection |                                 |
-| ARP spoofing    | ARP                 | DoS, Spoofing              |                                 |
-| MAC Flooding    | ARP (with switches) | Spoofing                   | * Also switches  are vulnerable |
-| STP Attack      | BDPU                | Spoofing, Sniffing         |                                 |
-| IP Spoofing     | UDP, ICMP           | Spoofing                   |                                 |
-| Route Mangling  | IGRP, RIP, OSPF     | Redirection                |                                 |
+| Name            | Protocol            | Pourpose(s)                      | Description                                       | Solution(s)                     |
+| --------------- | ------------------- | -------------------------------- | ------------------------------------------------- | ------------------------------- |
+| Ping of Death   | ICMP                | DoS                              | Len > max                                         |                                 |
+| Teardrop        | TCP                 | DoS                              | Overlapping segments                              |                                 |
+| Land Attack     | TCP                 | DoS                              | SYN to self                                       |                                 |
+| SYN Flood       | TCP                 | DoS                              | Leave lots of half-open connections               | SYN Cookie                      |
+| Smurf           | ICMP                | DDoS                             | Lot of machines responding to a broadcast request | No Broadcast from outside       |
+| Promiscuous NIC | -                   | Sniffing                         | Read everything from network card                 | Use switches *                  |
+| TCP Hijacking   | TCP                 | Spoofing, Sniffing, DoS          | MITM during TCP handshake                         |                                 |
+| DNS Poisoning   | DNS                 | DoS, Sniffing                    | Respond to DNS request in DNS recursive mode      |                                 |
+| ARP spoofing    | ARP                 | DoS, Spoofing                    | Reply to ARP request (who is 192.168...?)         |                                 |
+| MAC Flooding    | ARP (with switches) | Spoofing                         | Fill CAM table of a switch                        | * Also switches  are vulnerable |
+| IP Spoofing     | UDP, ICMP           | Spoofing                         | Change source IP in UPD/ICMP packets              |                                 |
+| DHCP Poisoning  | DHCP                | DoS, Sniffing, Redirection       | DHCP_OFFER from a normal user                     |                                 |
+| ICMP Redirect   | ICMP                | DoS, Sniffing, Redirection       | Communicate better route                          |                                 |
+| STP Attack      | BDPU                | Redirection                      | Modify spanning tree                              |                                 |
+| Route Mangling  | IGRP, RIP, OSPF     | Redirection                      | Redirect traffic from routers                     |                                 |
 
 # SECURE ARCHITECTURES
 
