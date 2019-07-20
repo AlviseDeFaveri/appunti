@@ -42,7 +42,7 @@
 
 # CRYPTOGRAPHY
 
-**Kerckhoff Principle:** Security relies on the secrecy of the <u>key</u>, never on the secrecy of the algorithm.<br>**Perfect Cipher** (Shannon): No matter how much time/strength is spent, no secret will be leaked. This means that the probability of reading a message M is equal <u>with or without</u> the cyphertext. Possible only if key length is same of message length $|K|\ge |M|​$. Practically infeasible.
+**Kerckhoff Principle:** Security relies on the secrecy of the <u>key</u>, never on the secrecy of the algorithm.<br>**Perfect Cipher** (Shannon): No matter how much time/strength is spent, no secret will be leaked. This means that the probability of reading a message M is equal <u>with or without</u> the cyphertext. Possible only if the cardinality of the key space is the same of the cardinality of the message space, $|K|\ge |M|$. Practically infeasible.
 $$
 P(M=m\ |\ C=c)\ =\ P(M=m)
 $$
@@ -489,13 +489,24 @@ Hrt of hybrid of MAC and DAC.
 
   * Address Space Layout Randomization (**ASLR**) <br> $\rightarrow$ Come fotterlo: *Memory Leakage del sEBP o un qualsiasi puntatore*
 
-
 ## Format Strings
 
-* Vulnerable functions: printf, fprintf, sprintf, snprintf...
+**General case** - there must be these conditions:
 
-  * `printf(char*)`
-  * `snprintf(buf, 250, char*`)
+* in the **Programming Laguage**
+  * a so-called variadic function, i.e. a variable number of parameters 
+  * parameters are "resolved" at runtime by pulling them from the stack
+  * a mechanism (e.g., placeholders) to (in)directly r/w arbitrary locations
+* in the **Program**, a data flow that enables the user to control number and type of the parameters
+
+**Countermeasures**
+
+- *Runtime*: checkare il numero di parametri e il numero di placeholder
+- *Complier*: accettare solo variabili statiche che definiscono la formattazione (e.g. no printf(*variabile*)).
+
+In C:
+
+* Vulnerable functions in C: `printf(char*)`, `snprintf(buf, 250, char*`)
 
 * Se come stringa uso `%x %x %x`... posso leggere lo stack $\rightarrow$ **memory leak**
 
@@ -503,7 +514,7 @@ Hrt of hybrid of MAC and DAC.
 
   * Posso usarlo ad es. per trovare la posizione di una variabile globale
 
-* **Per scrivere** I want to write 0xXXXX YYYY in target address $tgt$
+* **Per scrivere** I want to write 0xXXXX YYYY in target address $tgt$ con displacemeny $pos​$
 
   ```html
   case XXXX < YYYY
@@ -513,16 +524,6 @@ Hrt of hybrid of MAC and DAC.
   	<tgt(hex)> <tgt+2(hex)> %<YYYY(dec)-8>c %<pos(dec)>$hn %<XXXX-YYYY(dec)>c %<pos+1(dec)>$hn
   ```
 
-* Countermeasures
-
-  * Quelle per buffer overflow
-  * Checkare il numero di parametri e il numero di placeholder
-
-* **General case** - format strings can be exploited when there is:
-
-  * a so-called variadic function, i.e. a variable number of parameters and parameters are "resolved" at runtime by pulling them from the stack
-  * a mechanism (e.g., placeholders) to (in)directly r/w arbitrary locations
-  * the ability for the user to control them
 
 # WEB APPLICATION ATTACKS
 
@@ -535,7 +536,7 @@ There must be a data flow from a  user-controlled HTTP variable (e.g., parameter
 * Server Admin: **Escaping**, prepared queries
 * DB admin: **restrict access** on tables
 
-*Blind Injections* are injections where the query executed does not display values back to the attacker. Still it gets executed, hence we can for examples **INSERT** something.
+**Blind Injections**: In a blind injection the data retrieved by the modified SQL query is not displayed back to the attacker. This can still be exploited: changes can be blindly executed in the database, or by using side­ effects of queries the attacker can guess the answers.
 
 ## XSS
 
@@ -599,14 +600,23 @@ Attacker sends a malicious link to the victim, which is logged in with the bank'
 
 **SYN flood**: Attacker generates <u>TCP SYN</u> requests with spoofed IP $\rightarrow$ The server keeps all half open connections in memory waiting for ACK, filling the queue.
 
-* **Solution - SYN Cookies**: choose a random generated cookie as ISN (Initial Sequence Number) that identifies the client. In this way we don't need to remember the open connections and we can discard the half open ones.
+* **Solution - SYN Cookies**: consists in replying with a SYN­-ACK in a special way which encodes information in the packet, allowing to discard information about half ­open connections.
 
-**Smurf**: Send <u>ICMP</u> packets with spoofed IP to a broadcast address $\rightarrow$ the response will be sent by millions of machines to the spoofed address.
+**Smurf**: Send <u>ICMP</u> packets with spoofed IP to a broadcast address $\rightarrow​$ the response will be sent by millions of machines to the spoofed address.
 
-* **BAF** (Bandwidth Amplification Factor): 
-  $$ BAF = \dfrac{Response\ len \times \#\ of\ responses }{Request\ len} ​$$
+---
 
-* **Solution** (in the sending network): Firewall that denies Broadcast messages from external.
+In general, the conditions for an **Amplification Based Attack** are
+
+1. The protocol must be easily spoofable
+2. There must exists response with len >> request len
+3. Easily find many machines
+
+**BAF** (Bandwidth Amplification Factor):  $$ BAF = \dfrac{Response\ len \times \#\ of\ responses }{Request\ len} $$
+
+* **Mitigation** (in the sending network): Firewall that denies Broadcast messages from external. No real solution.
+
+---
 
 **NIC in Promiscuous Mode**: Use *Network Interface Card* to read everything that passes on the network.
 
@@ -642,9 +652,9 @@ Victim -> Server2: SYN(seq=x)
 Attacker -> Victim: DoS
 Server2 --> Attacker: SYN-ACK(seq=y, ack=x+1)
 Attacker -> Victim: DoS
-Attacker -> Attacker: Guess x (and y \nif not MITM)
-Attacker -> Victim: DoS
+note over Attacker: Guess x (and y \nif not MITM)
 Attacker -> Server2: ACK(seq=x+1, ack=y+1)
+Attacker -> Victim: DoS
 
 ```
 
@@ -663,23 +673,23 @@ Attacker -> Server2: ACK(seq=x+1, ack=y+1)
 
 ## Tabellozzo
 
-| Name            | Protocol            | Pourpose(s)                      | Description                                       | Solution(s)                     |
-| --------------- | ------------------- | -------------------------------- | ------------------------------------------------- | ------------------------------- |
-| Ping of Death   | ICMP                | DoS                              | Len > max                                         |                                 |
-| Teardrop        | TCP                 | DoS                              | Overlapping segments                              |                                 |
-| Land Attack     | TCP                 | DoS                              | SYN to self                                       |                                 |
-| SYN Flood       | TCP                 | DoS                              | Leave lots of half-open connections               | SYN Cookie                      |
-| Smurf           | ICMP                | DDoS                             | Lot of machines responding to a broadcast request | No Broadcast from outside       |
-| Promiscuous NIC | -                   | Sniffing                         | Read everything from network card                 | Use switches *                  |
-| TCP Hijacking   | TCP                 | Spoofing, Sniffing, DoS          | MITM during TCP handshake                         |                                 |
-| DNS Poisoning   | DNS                 | DoS, Sniffing                    | Respond to DNS request in DNS recursive mode      |                                 |
-| ARP spoofing    | ARP                 | DoS, Spoofing                    | Reply to ARP request (who is 192.168...?)         |                                 |
-| MAC Flooding    | ARP (with switches) | Spoofing                         | Fill CAM table of a switch                        | * Also switches  are vulnerable |
-| IP Spoofing     | UDP, ICMP           | Spoofing                         | Change source IP in UPD/ICMP packets              |                                 |
-| DHCP Poisoning  | DHCP                | DoS, Sniffing, Redirection       | DHCP_OFFER from a normal user                     |                                 |
-| ICMP Redirect   | ICMP                | DoS, Sniffing, Redirection       | Communicate better route                          |                                 |
-| STP Attack      | BDPU                | Redirection                      | Modify spanning tree                              |                                 |
-| Route Mangling  | IGRP, RIP, OSPF     | Redirection                      | Redirect traffic from routers                     |                                 |
+| Name            | Protocol            | Pourpose(s)                | Description                                                | Solution(s)                                            |
+| --------------- | ------------------- | -------------------------- | ---------------------------------------------------------- | ------------------------------------------------------ |
+| Ping of Death   | ICMP                | DoS                        | Memory error in ICMP implementation (packet len > max len) | Upgrade OS, Firewall that drops malformed ICMP packets |
+| Teardrop        | TCP                 | DoS                        | Overlapping segments                                       |                                                        |
+| Land Attack     | TCP                 | DoS                        | SYN to self                                                |                                                        |
+| SYN Flood       | TCP                 | DoS                        | Leave lots of half-open connections                        | SYN Cookie                                             |
+| Smurf           | ICMP                | DDoS                       | Lot of machines responding to a broadcast request          | No Broadcast from outside, no public available server  |
+| Promiscuous NIC | -                   | Sniffing                   | Read everything from network card                          | Use switches *                                         |
+| TCP Hijacking   | TCP                 | Spoofing, Sniffing, DoS    | MITM during TCP handshake                                  |                                                        |
+| DNS Poisoning   | DNS                 | DoS, Sniffing              | Respond to DNS request in DNS recursive mode               |                                                        |
+| ARP spoofing    | ARP                 | DoS, Spoofing              | Reply to ARP request (who is 192.168...?)                  |                                                        |
+| MAC Flooding    | ARP (with switches) | Spoofing                   | Fill CAM table of a switch                                 | * Also switches  are vulnerable                        |
+| IP Spoofing     | UDP, ICMP           | Spoofing                   | Change source IP in UPD/ICMP packets                       |                                                        |
+| DHCP Poisoning  | DHCP                | DoS, Sniffing, Redirection | DHCP_OFFER from a normal user                              |                                                        |
+| ICMP Redirect   | ICMP                | DoS, Sniffing, Redirection | Communicate better route                                   |                                                        |
+| STP Attack      | BDPU                | Redirection                | Modify spanning tree                                       |                                                        |
+| Route Mangling  | IGRP, RIP, OSPF     | Redirection                | Redirect traffic from routers                              |                                                        |
 
 # SECURE ARCHITECTURES
 
@@ -751,8 +761,9 @@ Must be the **single enforcement point** between a screened network and outside 
 * **Circuit level firewalls** (transport-application): client connects to a port of the proxy
   * legacy, not transparent
   * only historical example SOCKS
-* **Application proxies** (application): Tutto il traffico va verso il proxy.
+* **Application proxies** (application): Tutto il traffico va verso il proxy, e.g. HTTP proxy.
   * specific filtering, advanced scanning (e.g. antivirus/spam)
+  * in case of **HTTPS**, the firewall must become a MITM during the SSL handshake. To achieve this, we install another trusted CA in the certificate store of each client's browser.
 
 ## Multi Zone architectures
 
@@ -949,6 +960,7 @@ Two possible analysis can be made:
 | Parse the executable code               | Observe the runtime behaviour |
 | Good for code coverage and dormant code | No complete code coverage     |
 | Bad against obfuscation                 | Good against obfuscation      |
+| Good performance                        |                               |
 
 ## Rootkits
 
