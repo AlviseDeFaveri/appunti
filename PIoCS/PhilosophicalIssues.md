@@ -318,11 +318,48 @@ No purely formal model will ever be sufficient for intentionality.
 
 # Brooks, *Computer Scientist as Toolsmith*, 1994
 
-# Brooks, *CS as Toolsmith*, 1994
 ---------------------------------------------------------------------------
 
+## Mistaken name
 
-# Scheultz, *Philosophical Issues about Computation*, 2000
+*Science is observation and classification of facts, especially with the establishment of quantitative general rules.*
+
+**Science vs Engineering**
+
+* Scientists build in order to study
+* Engineers study in order to build
+
+Computer Science is the engineering of making things which others use to satisfy human needs $\Rightarrow$ **Toolsmith**
+
+**What is the problem of misnaming?**
+
+1. trying to say science > engineering
+2. we care on discovering *new* things, but they should be measured on how *useful* they are
+3. we forget users
+4. we are misdirecting labor for from concrete problem to abstract problems
+
+*Computer* is right $\rightarrow$ these machine have enabled arbiratry complexity previously could not be handled
+
+Important aspect of computer science: *subcreation* 
+
+## Evolution of CS
+
+AI goals are much more difficult than expected, and went into the wrong direction.
+
+**IA** (intelligence amplifying) always > AI
+
+Working on problems given by others can enrich computer science:
+
+* real-scale problems
+* honest success and failures
+* can't abstract away only the mathematical part
+* drive for new pieces of cs
+* fun
+
+
+
+# Scheutz, *Philosophical Issues about Computation*, 2000
+
 ---------------------------------------------------------------------------
 
 
