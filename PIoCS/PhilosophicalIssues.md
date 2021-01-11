@@ -183,9 +183,140 @@ Isolate the interrogator from possible extrasensory premonitions/mind-reading
 ----------------------------------------------------------------------------
 
 
+
 # Searle, *Minds, Brains and Programs*, 1980
+
 ---------------------------------------------------------------------------
 
+## Abstract
+
+Propositions:
+
+1. Intentionality is a product of causal features of the brain (i.e. there is a causal relationship between mental processes and brains)
+2. Instantiating a computer program is never a sufficient condition of intentionality (i.e. a human agent could instantiate the program without having intentionality)
+3. $\Rightarrow$ The brain doesn't produce intentionality by instantiating a computer program
+4. Any mechanism capable of producing intentionality must have at least the causal powers of th brain (consequence of 1)
+5. Strong AI (i.e. intentionality created artificially) could not succeed just by designing programs
+
+$\implies$ **No program by itself is sufficient for thinking**
+
+## Strong vs Weak AI
+
+* Weak AI: computer is a powerful tool to study mind and test hypothesis on them
+* Strong AI: a computer with the right program is literally a mind, i.e. can literally understand
+  * e.g. Schank program to understand stories, i.e. answer to questions that are not explicitly stated in the story
+  * claims made by strong AI: Shank's machine is literally  thinking, and the machine porgram is the explanation of how humans understand stories
+
+## Chinese Room Experiment
+
+Setting: locked in a room, I don't know chinese
+
+1. Start with a large batch of chinese writing (**script**)
+2. Second batch + rules to correlate first batch $\rightarrow$ second batch (**story**)
+   - Rule entirely about the formal symbols
+3. Third batch (**questions**) + rules to correlate to the first two + rules to answer
+
+Rule = the program
+
+4. Script+ story + questions are also made in english
+
+One could say I know both english and chinese (*false* $\implies$ I am just manipulation symbols).
+
+## Consequences
+
+1. I don't understand chinese $\implies$ Schank's machine doesn't understand stories
+2. Is computation a necessary condition for understanding? I.e. when I read in english, am I doing just more of the same thing I am doing for chinese?
+   - Might be the case but there is no evidence
+   - E.g. in the chinese room I understand english but not chinese, yet for the chinese I was given a **program** (computational operations of purely formally specified elements) while for english I didn't
+     - $\implies$ not only they are not sufficient, but they are not necessary and don't even seem to be relevant
+
+$\implies$ Whatever purely formal principles you give a machine, they are not sufficient to understanding, since if they are given to a human that doesn't guarantee understanding.
+
+## Understanding
+
+**Critics**: there are different degrees of understanding $\rightarrow$ Whether x understands y is a matter of discussion not a fact
+
+* not a problem in the chinese room: I literally understand english and don't understand chinese, we are at the two opposites
+
+We attribute understanding to objects because our tools are extensions of our purposes.
+
+Claim of Newell&Simon: the way machine understand is the way in which humans understand. Searle's claim: machine can't understand anything.
+
+## Replies
+
+### Systems reply
+
+*The understanding is not ascribed to the single individual, but to the system individual + rules*
+
+<u>Response</u>: what if the individual internalizes all the information, e.g. memorizes all the rules?
+
+* The two "subsystems", individual + english and individual + chinese are not even remotely similar.
+* Adequacy of the Turing test is under discussion: there are two systems that pass the turing test but of which only one of them understands
+* Absurd consequence of the system view: my stomach should be conscious (has input and ouput)
+  * AI must make a distinction between mental and non-mental, and it must be intrinsic to the mind and not just an opinion
+  * We are asked to accept it as a discovery of AI that the hunk of metal on the wall has beliefs in the exact same sense we have
+
+### Robot reply
+
+*Adding sensors and actuators to be more similar to humans*
+
+* This view concedes the fact that pure symbols manipulation is not enough
+
+<u>Response</u>: even if symbols were given in other forms in the chinese room, e.g. television, it would still be just symbols manipulation, where symbols can be received from the perceptual apparatus
+
+### Brain Simulator reply
+
+*What if the program was to simulate exactly the neuron activity of a brain when talking chinese*
+
+* This is not very in line with the strong AI idea, which should be that we don't know how the brain (hardware) works to know how the mind (software) works
+
+<u>Response</u>: simulating the brain still doesn't mean that the simulator understands what's happening (e.g. if in the chinese room I have instructions on how to drive some water pipes that simulate neurons)
+
+$\implies$ Formal properties are not sufficient for the causal properties
+
+### Combination reply
+
+*If we could build a robot whose behavior was indistinguishable over a large range from human behavior, we would attribute intentionality to it, pending some reason not to*
+
+<u>Response</u>: true because we would ascribe it intentionality *only if we don't know that's not the case*. E.g. if we discover that there's a man inside manipulating symbols without understanding them we wouldn't ascribe it intentionality.
+
+The reason we think that animals have intentions are :
+
+1. we can't make sense of the animal's behavior
+2. animals are made of a similar stuff as humans ($\Rightarrow$ same causal stuff underlying it)
+   * As soon as we knew the behavior is a result of a formal program and that the causal properties of the physical substance don't matter, we don't ascribe intentionality
+
+### Other Minds reply
+
+*How do I ascribe intentionality to others? Only by behavior: if the machine passes the test is good*
+
+<u>Response</u> we are analyzing whether computational processes alone can describe what I mean when I attribute cognitive state to something. They can't, because they exist without cognition.
+
+### Many Mansions reply
+
+*You are focusing only on analogue and digital computers*
+
+<u>Response</u> The point is to contradict the claim that mental processes are just computational processes over formally defined elements.
+
+## Can machines have intentions?
+
+In principle why not, just not only in terms of computational processes over formally defined elements ($\implies$ not with computer programs).
+
+No purely formal model will ever be sufficient for intentionality.
+
+<u>Conclusion</u> machines can think, but it is not true that something can think only because it is a computer program
+
+* syntax without semantics $\implies$no reasoning
+* simulation is not duplication in the case of intentionality (i.e. can't really separate formal program from the realization)
+
+## Why do people believe that computers can be conscious?
+
+1. mistaking simulation with duplication
+2. both minds and computers do information processing (but it's a different kind of processing, one is on symbols that have meaning the others don't)
+3. behaviouristic and operationalistic view (if it does something similar to humans it has to be like humans)
+4. dualistic view of the brain
+
+# Brooks, *Computer Scientist as Toolsmith*, 1994
 
 # Brooks, *CS as Toolsmith*, 1994
 ---------------------------------------------------------------------------
