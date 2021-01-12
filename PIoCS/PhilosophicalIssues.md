@@ -156,7 +156,7 @@ Limitations of discrete-state machines (Godel 1931). In particular Turing 1937 d
 
 Isolate the interrogator from possible extrasensory premonitions/mind-reading
 
-#### Learning Machines
+## 7. Learning Machines
 
 - No good arguments until now, only critiques of counterarguments
 - Can a machine be made to be supercritical (given an idea produces many consequent ideas and doesn't drop into quiescence)
@@ -181,6 +181,107 @@ Isolate the interrogator from possible extrasensory premonitions/mind-reading
 
 # Newell & Simon, *CS as Empirical Inquiry: Symbols and Search*, 1975
 ----------------------------------------------------------------------------
+
+Computer Science $\rightarrow$ *study of the phenomena surrounding computer*
+
+* computer as the programmed, living machine
+* **computer science is a empirical discipline**
+  * *experimental science*, even if some of its forms of observation doesn't fit in traditional science
+  * machines are experiments
+  * constructing a machine poses a question to nature (*answer: analyze the machine in operation*)
+  * we can relate structure to behavior and learn lessons with even 1 experiment
+* **Reasons to build computers and programs**
+  * serve society (serve economic tasks)
+  * discover new phenomena (the phenomena around computers are deep and obscure)
+    * learning more about these phenomena pays off in permanent acquisition of new techniques, that can create instruments to help society
+* <u>purpose of the paper</u>: examine how cs *develops understanding by empirical inquiry*.
+  1. Symbolic systems
+  2. Heuristic search $\Rightarrow$ Both contribute to understanding how intelligence works
+
+## Physical Symbols System
+
+* Main contribution of CS $\rightarrow$ understand what symbols are (empirically)
+  * AI makes us understand the system requirements for *intelligent action*, i.e. ability to achieve goals in unknown environment
+  * There's no *intelligence principle* (something which is entirely responsible of intelligence)
+  * A requirement for intelligence is that it must store and manipulate symbols
+* Laws of **qualitative structure** are important in scientific discovery
+  * **Cell doctrine** was developed before explicitly defining all things that compose a cell
+  * **Plate Tectonics** the surface of the world is made by huge plates. Started as highly qualitative theory
+  * **Germ Theory**  most disease are caused by transmitting single cell organisms that reproduce inside bodies $\rightarrow$ the law has many exceptions
+  * **Atomism** things are made by small, uniform particles
+* Definition of **Physical symbols systems**
+  * *physical* $\rightarrow$ 1. obeys the laws of physics, 2. not restricted to humans
+  * has a set of physical patterns called *symbols* that are grouped in *symbol structures* (expressions)
+  * has a collection of *processes* that operate on these expressions to produce other expressions
+    * *Designation* $\rightarrow$ A symbol designates an object if given the symbol, the system can modify or "read" the object (access to object via an expression)
+    * *Interpretation* $\rightarrow$ A system can interpret an expression if it designates a process and the process is carried out by the system
+  * no a-priori prescription of which symbols can designate which expressions
+  * there is an expression that designates every possible process of the machine
+  * there are processes for creating and modifying expressions
+  * expressions don't change on their own
+  * the number of expression is unbounded
+* The **Physical Symbol System Hypothesis**: a physical symbol system has the necessary and sufficient means for general intelligent action (i.e. appropriate to the goal and adaptive w.r.t. the environment)
+  * The physical symbol system is an instance of a universal machine
+
+## Development of the Symbol System Hypothesis
+
+* **Logic**: Frege and Russell put the notions of *proof* and *deduction* on a secure footing
+  * culminated in mathematical logic
+  * logic is played on purely syntactic rules (symbols have no meaning)
+  * **formal symbol manipulation**
+* **Turing machine** 
+  * contains the notions both of **what cannot be computed** and of **universal machines**
+  * Concurrently discovered by Emil Post and Alonzo Church : this convinces us that we have captured the essence of information processing
+  * **automatic formal symbol manipulation** 
+  * half of the *interpretation* (machines can run from a description)
+* **Store Program** program is data
+  * other half of the *interpretation*: the system's own data can be interpreted
+* **List Processing**
+  * pointers to other elements $\rightarrow$ Symbols that *designate*  other symbol structures
+  * first time dynamic memory
+  * showed that computers are data + operations on the data
+* Things we have discovered about symbolic processing are caused by the evolution of computers
+
+### Evidence
+
+<u>Hypothesis</u>: *Physical symbol systems are capable of intelligent action, and intelligent action calls for a symbol system* (empirical generalization)
+
+* Look at tasks that call for intelligence, then construct a program that can do it
+  * like the germ hypothesis $\rightarrow$ find for a disease, look for a germ
+  * many programs have been constructed that are steadily getting better
+  * found some general things about intelligent programs
+    * e.g. general problem solvers
+* Human symbolic behavior (model human behavior with symbol systems)
+  * Psychology observes human intelligent activity and try to model it with symbol systems
+* Absence of competing hypothesis
+
+$\implies$ Computer science develops scientific hypothesis (e.g. about intelligence) and tries to verify them by empirical inquiry.
+
+## Heuristic Search
+
+**Symbols systems solve problems using heuristic search **(not logically derived but empirically)
+
+* Solutions are symbolic structures. Physical symbol system exercise intelligence by generating and progressively modifying symbols until they reach a solution structure
+* **Problem solving** is a typical task for intelligent agents
+  * how do you know what you are searching for? and how you know you found a solution?
+    * you have a *generator* of symbol structures (potential solutions) 
+      * requires a *solution space*
+      * to display *intelligence* means exploring the solution space in a way in which more likely solutions are likely to appear before others
+      * you have to *extract information* from the problem space
+        * if solutions are distributed randomly you cannot have intelligence
+        * there must be some pattern to recognize and the symbol system needs to be capable of extracting this information
+    * and a *test* to verify correctness
+      * it is not automatic to derive a solution from the test
+  * e.g. tree exploration
+    * in chess, choosing where to branch is more important that exploring deeply the tree
+    * intelligence is not exploring a lot, but going directly to the objective in a space where you could potentially explore a lot if you are not intelligent
+      * control exponential explosion
+    * <u>basic question</u>: what shall be done next?
+
+* **New directions**
+  * Nonlocal use of info
+  * Semantics (e.g. recognizing good positions in chess)
+  * selecting appropriate representations
 
 
 
@@ -362,10 +463,25 @@ Working on problems given by others can enrich computer science:
 
 ---------------------------------------------------------------------------
 
+## What is computation?
+
+* execution of algorithms
+  * What is an algorithm? $\rightarrow$ finite set of instructions that operate on *symbols* and that can be *implemented* by a mechanism
+  * The mechanism performs a sequence of discrete atomic steps
+* history
+  * Leibniz: mechanical reasoner
+  * Thinking involves *representations*
+  * Computation $\rightarrow$ mechanically manipulate representations
+
+# Moor, *What is Computer Ethics?*, 2006
+
+----
+
+
 
 # Denning & Rosenbloom, *Fourth domain of Science*, 2009
----------------------------------------------------------------------------
 
+---------------------------------------------------------------------------
 
 
 
