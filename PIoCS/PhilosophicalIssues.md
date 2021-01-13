@@ -511,11 +511,60 @@ Cognition can be understood in terms of computations?
 
 ----
 
-Computers are special technology and they raise some special ethical issues
+Computers are special technology and they raise some special ethical issues.
+
+Computers provide us with **new capabilities** and these in turn give us new choices for action. Often, either **no policies** for conduct in these situations exist. 
+
+* there is a conceptual vacuum that causes the policy vacuum
+* What is needed is an analysis which provides a coherent **conceptual framework** within which to formulate a policy for action
+
+<u>e.g.</u> protect a program an intellectual property (own an idea or a process?)
+
+* general ethics aspects (what is good? what are our basic rights?)
+* scientific aspects
+
+Are computers a revolution?
+
+* abundant and cheap
+* became more powerful and user-friendly
+* **logical malleability** (it can do whatever can be expressed with logic)
+  * syntactical (can have many states)
+  * semantical (can be used to represent anything)
+
+Two phases of revolution:
+
+1. introduction (perfection of technology)
+2. permeation (in culture and society)
+   * e.g. electoral process
+   * work automation
+   * finance (what is money?)
+
+**Invisibility Factor**
+
+1. invisible abuse
+2. privacy & security
+3. surveillance
+4. invisible programming values (embedded in the choices made by programmers)
+5. calculations too complex for human introspection
 
 # Denning & Rosenbloom, *Fourth domain of Science*, 2009
 
 ---------------------------------------------------------------------------
 
-
+* 3 great domains of science (life, physics, social)
+  * computation realized with physical processes
+  * computation found in biology (e.g. DNA)
+  * no domain studies computation, they *use* it
+* computing is separate domain?
+  * distinctive focus
+  * constituent fields in interaction (computer science, informatics, software engineering ecc)
+  * pervasive influence
+  * core phenomena (computation) apply universally
+  * mathematics is not a separate domain of science
+* taxonomies describe *static* aspects, but there is also *interaction*
+  * *implementation* (e.g. AI implements human though, H and O implement water)
+  * *interactions* (human interact with computers)
+  * but also between fields (quantum mechanics, social network analysis)
+* what is representation and what are things that are computationally represented (e.g. DNA)?
+* does not conflict with the ides of engineering (there are aspects of both)
 
