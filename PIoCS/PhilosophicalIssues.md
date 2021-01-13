@@ -470,14 +470,48 @@ Working on problems given by others can enrich computer science:
   * The mechanism performs a sequence of discrete atomic steps
 * history
   * Leibniz: mechanical reasoner
-  * Thinking involves *representations*
+  * '800: Thinking involves *representations*
   * Computation $\rightarrow$ mechanically manipulate representations
+  * Church: effectively calculable function
+  * Turing: automated computations
+    1. finite number of symbols used in a computation
+    2. fixed bound of input
+    3. symbols can be written or erased
+    4. upper bound to the distance between cells than can be considered in two consecutive steps
+    5. upper bound to the number of states
+    6. claim: any function computable by a human using fixed rules can be computed by a TM
+* different aspects
+  * formal symbol manipulation
+  * effective computation
+  * execution of algorithm
+  * finite state machine
+  * information processing
+  * interactive systems
+  * dynamic systems
+* real-life computation
+  * what can be computed *in reasonable limits*? (**complexity theory**)
+  * what function does the OS or the WWW compute?
+  * new concept of **interaction** vs only algorithm
+  * computation as interactive (focus on *processes*)
+
+## Cognitive Science
+
+Cognition can be understood in terms of computations?
+
+* We can study cognition without the underlying hardware
+* *computational claim* about the mind (Computationalism)
+  1. mental processes are computational processes
+  2. mental descriptions : brains = program : hardware
+* some high-level stuff seems to fit (rotating 3d images, chess moves, reasoning about other's behavior, planning...)
+* but there are some counterarguments
+  * trend to substitute the classical notion of computation with interaction ecc
+  * nevertheless useful tool: can use computation to *simulate* using a computational approximation
 
 # Moor, *What is Computer Ethics?*, 2006
 
 ----
 
-
+Computers are special technology and they raise some special ethical issues
 
 # Denning & Rosenbloom, *Fourth domain of Science*, 2009
 
